@@ -10,6 +10,7 @@ using System.Data.Common;
 using System.ComponentModel;
 using System.Runtime.Serialization;
 using System.Collections;
+using MapFarce.EditProperties;
 
 namespace MapFarce.DataSources
 {

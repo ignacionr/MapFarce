@@ -28,11 +28,20 @@ namespace MapFarce
 
             FileInfo fi = new FileInfo(ofd.FileName);
             DataSourceCSV csvSource = new DataSourceCSV(fi);
-            dataSourceControl1.Populate(csvSource);
+
+            if (sourceControl == null)
+            {
+                sourceControl = new DataSourceControl();
+                sourceControl.Location = new Point(12, 41);
+                Controls.Add(sourceControl);
+            }
+
+            sourceControl.Populate(csvSource);
 
             source = csvSource;
         }
 
+        DataSourceControl sourceControl;
         DataSource source;
 
         private void btnRead_Click(object sender, EventArgs e)

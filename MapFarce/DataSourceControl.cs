@@ -16,23 +16,21 @@ namespace MapFarce
             InitializeComponent();
         }
 
-        private DataSource Source;
+        public DataSource Source { get; private set; }
 
-        public void Populate<DataType, DataField>(DataSource<DataType, DataField> source)
-            where DataType : DataType<DataField>
-            where DataField : IDataField
+        public void Populate(DataSource source)
         {
             Source = source;
             lblName.Text = source.Name;
 
             treeView.Nodes.Clear();
 
-            foreach (var type in source.GetDataTypes())
+            foreach (var type in source.GetDataTypesBase())
             {
                 TreeNode typeNode = new TreeNode();
                 typeNode.Text = type.Name;
 
-                foreach (var field in type.GetFields())
+                foreach (var field in type.GetFieldsBase())
                 {
                     TreeNode fieldNode = new TreeNode();
                     fieldNode.Text = field.Name;
@@ -45,13 +43,19 @@ namespace MapFarce
             treeView.ExpandAll();
         }
 
+        public void Repopulate()
+        {
+            Source.PropertiesChanged();
+            Populate(Source);
+        }
+
         private void lnkEdit_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             if (Source == null)
                 return;
 
             var editor = new DataSourceEdit();
-            editor.Populate(Source);
+            editor.Populate(this);
             editor.ShowDialog();
         }
     }

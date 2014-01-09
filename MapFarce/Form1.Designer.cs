@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.btnCreate = new System.Windows.Forms.Button();
-            this.dataSourceControl1 = new MapFarce.DataSourceControl();
             this.btnRead = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -44,14 +43,6 @@
             this.btnCreate.Text = "Open CSV";
             this.btnCreate.UseVisualStyleBackColor = true;
             this.btnCreate.Click += new System.EventHandler(this.btnCreate_Click);
-            // 
-            // dataSourceControl1
-            // 
-            this.dataSourceControl1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.dataSourceControl1.Location = new System.Drawing.Point(12, 41);
-            this.dataSourceControl1.Name = "dataSourceControl1";
-            this.dataSourceControl1.Size = new System.Drawing.Size(148, 148);
-            this.dataSourceControl1.TabIndex = 1;
             // 
             // btnRead
             // 
@@ -78,7 +69,6 @@
             this.ClientSize = new System.Drawing.Size(589, 201);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.btnRead);
-            this.Controls.Add(this.dataSourceControl1);
             this.Controls.Add(this.btnCreate);
             this.Name = "Form1";
             this.Text = "Form1";
@@ -90,7 +80,6 @@
         #endregion
 
         private System.Windows.Forms.Button btnCreate;
-        private DataSourceControl dataSourceControl1;
         private System.Windows.Forms.Button btnRead;
         private System.Windows.Forms.DataGridView dataGridView1;
     }

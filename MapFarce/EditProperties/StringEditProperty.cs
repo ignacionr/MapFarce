@@ -8,16 +8,30 @@ namespace MapFarce.EditProperties
 {
     class StringEditProperty : EditPropertyBase
     {
-        public StringEditProperty(string name, string desc)
-            : base(name, desc)
+        public StringEditProperty(string name)
+            : base(name)
         {
             tb = new TextBox();
             tb.Width = 200;
             Controls.Add(tb);
-            tb.Top = 8;
-            tb.Left = 100;
         }
 
         TextBox tb;
+
+        public override void SetToolTip(ToolTip tip, string text)
+        {
+            base.SetToolTip(tip, text);
+            tip.SetToolTip(tb, text);
+        }
+
+        public override void SetValue(object val)
+        {
+            tb.Text = val.ToString();
+        }
+
+        public override object GetValue()
+        {
+            return tb.Text;
+        }
     }
 }

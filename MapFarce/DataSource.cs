@@ -9,26 +9,48 @@ namespace MapFarce
     public abstract class DataSource
     {
         public abstract string Name { get; }
-        
+        public abstract IList<DataType> GetDataTypesBase();
+
         public abstract void BeginRead();
         public abstract DataItem ReadNextItem();
         public abstract void FinishRead();
+
+        public abstract void PropertiesChanged();
     }
 
-    public abstract class DataSource<DataType, FieldType> : DataSource
-        where DataType : DataType<FieldType>
-        where FieldType : IDataField
+    public abstract class DataSource<Data, Field> : DataSource
+        where Data : DataType<Field>
+        where Field : IDataField
     {
-        protected abstract IList<DataType> RetrieveDataTypes();
-        private IList<DataType> DataTypes;
-        public IList<DataType> GetDataTypes()
+        protected abstract IList<Data> RetrieveDataTypes();
+        private IList<Data> DataTypes;
+        public IList<Data> GetDataTypes()
         {
             if (DataTypes == null)
                 DataTypes = RetrieveDataTypes();
             return DataTypes;
         }
 
-        IEnumerator<DataType> readEnumerator;
+        public override IList<DataType> GetDataTypesBase()
+        {
+            var types = GetDataTypes();
+            List<DataType> typesBase = new List<DataType>(types.Count);
+            foreach (var type in types)
+                typesBase.Add(type);
+            return typesBase;
+        }
+
+        public override void PropertiesChanged()
+        {
+            // i guess the available data types would change if the properties change.
+            // I don't see how we'd keep data connections hooked up if the data types are completely replaced.
+            // will hold off for now.
+            //DataTypes = null;
+            foreach (var type in GetDataTypes())
+                type.SourceChanged();
+        }
+
+        IEnumerator<Data> readEnumerator;
         public override void BeginRead()
         {
             readEnumerator = GetDataTypes().GetEnumerator();
@@ -61,19 +83,37 @@ namespace MapFarce
         }
     }
 
-
-    public abstract class DataType<DataField>
-        where DataField : IDataField
+    public abstract class DataType
     {
         public abstract string Name { get; }
+        public abstract IList<IDataField> GetFieldsBase();
+        public abstract void SourceChanged();
+    }
 
-        protected abstract IList<DataField> RetrieveFields();
-        private IList<DataField> Fields;
-        public IList<DataField> GetFields()
+    public abstract class DataType<Data> : DataType
+        where Data : IDataField
+    {
+        protected abstract IList<Data> RetrieveFields();
+        private IList<Data> Fields;
+        public IList<Data> GetFields()
         {
             if (Fields == null)
                 Fields = RetrieveFields();
             return Fields;
+        }
+
+        public override IList<IDataField> GetFieldsBase()
+        {
+            var fields = GetFields();
+            List<IDataField> fieldsBase = new List<IDataField>(fields.Count);
+            foreach (var field in fields)
+                fieldsBase.Add(field);
+            return fieldsBase;
+        }
+
+        public override void SourceChanged()
+        {
+            Fields = null; // let these be reloaded
         }
 
         public abstract void StartRead();
@@ -117,20 +157,5 @@ namespace MapFarce
     {
         string Name { get; }
         //Type Type { get; }
-    }
-
-    [System.AttributeUsage(System.AttributeTargets.Property)]
-    public class UIEditableProperty : System.Attribute
-    {
-        public string Description { get; private set; }
-        public string Group { get; private set; }
-        public bool ReloadData { get; private set; }
-
-        public UIEditableProperty(string desc, string group, bool reloadData)
-        {
-            Description = desc;
-            Group = group;
-            ReloadData = reloadData;
-        }
     }
 }

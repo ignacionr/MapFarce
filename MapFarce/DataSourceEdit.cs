@@ -19,21 +19,22 @@ namespace MapFarce
             InitializeComponent();
         }
 
-        private DataSource source;
-        public void Populate(DataSource source)
+        private DataSourceControl source;
+        public void Populate(DataSourceControl source)
         {
             this.source = source;
 
             var groups = new SortedList<string, GroupBox>();
 
-            foreach (var prop in source.GetType().GetProperties())
+            foreach (var prop in source.Source.GetType().GetProperties())
             {
                 var attributes = prop.GetCustomAttributes(typeof(UIEditableProperty), false);
                 if (attributes.Length == 0)
                     continue;
 
                 UIEditableProperty attrib = attributes[0] as UIEditableProperty;
-                
+                attrib.Property = prop;
+
                 GroupBox group;
                 if (!groups.TryGetValue(attrib.Group, out group))
                 {
@@ -41,53 +42,60 @@ namespace MapFarce
                     groups.Add(attrib.Group, group);
                 }
 
-                AddEditControl(group, prop, attrib);
+                AddEditControl(group, attrib);
             }
         }
 
+        static Padding groupBoxMargin = new Padding(4, 4, 4, 0);
+        static Padding groupBoxPadding = new Padding(2, 12, 2, 4);
         private GroupBox CreateGroupBox(string name)
         {
             GroupBox gb = new GroupBox();
-            gb.Margin = new Padding(0);
-            gb.Width = Width - 8;
-            gb.Height = 10;
+            gb.Margin = groupBoxMargin;
+            gb.Padding = groupBoxPadding;
+            gb.Width = Width - groupBoxPadding.Horizontal - groupBoxMargin.Horizontal - 2;
+            gb.Height = groupBoxPadding.Vertical;
             gb.Text = name;
 
             flowLayoutPanel1.Controls.Add(gb);
             return gb;
         }
 
-        private void AddEditControl(GroupBox group, PropertyInfo prop, UIEditableProperty attrib)
+        private void AddEditControl(GroupBox group, UIEditableProperty attrib)
         {
-            Control c;
-            if (prop.PropertyType == typeof(FileInfo))
-            {
-                c = new FileEditProperty(prop.Name, attrib.Description);
-            }
-            else if (prop.PropertyType == typeof(bool))
-            {
-                c = new BoolEditProperty(prop.Name, attrib.Description);
-            }
-            else if (prop.PropertyType == typeof(char))
-            {
-                c = new CharEditProperty(prop.Name, attrib.Description);
-            }
-            else if (prop.PropertyType == typeof(string))
-            {
-                c = new StringEditProperty(prop.Name, attrib.Description);
-            }
+            EditPropertyBase c;
+            if (attrib.Property.PropertyType == typeof(FileInfo))
+                c = new FileEditProperty(attrib.Property.Name);
+            else if (attrib.Property.PropertyType == typeof(bool))
+                c = new BoolEditProperty(attrib.Property.Name);
+            else if (attrib.Property.PropertyType == typeof(char))
+                c = new CharEditProperty(attrib.Property.Name);
+            else if (attrib.Property.PropertyType == typeof(string))
+                c = new StringEditProperty(attrib.Property.Name);
             else
-                throw new NotImplementedException("Not configured to edit " + prop.PropertyType.Name + " properties!");
+                throw new NotImplementedException("Not configured to edit " + attrib.Property.PropertyType.Name + " properties!");
 
-            c.Left = 0;
-            c.Top = group.Controls.Count * 48;
-            group.Controls.Add(c);
+            c.SetValue(attrib.Property.GetValue(source.Source, null));
+            c.SetToolTip(toolTip1, attrib.Description);
+
+            c.Tag = attrib;
+            c.Left = groupBoxPadding.Left;
+            c.Width = group.Width - groupBoxPadding.Horizontal;
             group.Height += c.Height;
+            group.Controls.Add(c);
+            c.Top = group.Height - groupBoxPadding.Bottom - c.Height;
         }
 
         public void Save()
         {
+            foreach (GroupBox group in flowLayoutPanel1.Controls)
+                foreach (EditPropertyBase control in group.Controls)
+                {
+                    var attribute = control.Tag as UIEditableProperty;
+                    attribute.Property.SetValue(source.Source, control.GetValue(), null);
+                }
 
+            source.Repopulate();
             source = null;
         }
 

@@ -60,24 +60,22 @@
       <DependentUpon>DataSourceEdit.cs</DependentUpon>
     </Compile>
     <Compile Include="DataSources\DataSourceCSV.cs" />
-    <Compile Include="EditProperties\EditPropertyBase.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="EditProperties\EditPropertyBase.Designer.cs">
-      <DependentUpon>EditPropertyBase.cs</DependentUpon>
-    </Compile>
     <Compile Include="EditProperties\BoolEditProperty.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="EditProperties\CharEditProperty.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="EditProperties\EditPropertyBase.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="EditProperties\FileEditProperty.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="EditProperties\StringEditProperty.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Component</SubType>
     </Compile>
+    <Compile Include="EditProperties\UIEditableProperty.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -91,9 +89,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DataSourceEdit.resx">
       <DependentUpon>DataSourceEdit.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="EditProperties\EditPropertyBase.resx">
-      <DependentUpon>EditPropertyBase.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
