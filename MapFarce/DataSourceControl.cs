@@ -18,9 +18,8 @@ namespace MapFarce
 
         private DataSource Source;
 
-        public void Populate<DataType, DataItem, DataField>(DataSource<DataType, DataItem, DataField> source)
-            where DataType : DataType<DataItem, DataField>
-            where DataItem : DataItem<DataField>
+        public void Populate<DataType, DataField>(DataSource<DataType, DataField> source)
+            where DataType : DataType<DataField>
             where DataField : IDataField
         {
             Source = source;

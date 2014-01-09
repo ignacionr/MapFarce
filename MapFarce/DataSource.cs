@@ -15,9 +15,8 @@ namespace MapFarce
         public abstract void FinishRead();
     }
 
-    public abstract class DataSource<DataType, ItemType, FieldType> : DataSource
-        where DataType : DataType<ItemType, FieldType>
-        where ItemType : DataItem<FieldType>
+    public abstract class DataSource<DataType, FieldType> : DataSource
+        where DataType : DataType<FieldType>
         where FieldType : IDataField
     {
         protected abstract IList<DataType> RetrieveDataTypes();
@@ -42,13 +41,13 @@ namespace MapFarce
             return ReadNext();
         }
         
-        public ItemType ReadNext()
+        public DataItem ReadNext()
         {
             while (!readEnumerator.Current.HasMoreData())
             {
                 readEnumerator.Current.FinishRead();
                 if (!readEnumerator.MoveNext())
-                    return default(ItemType);
+                    return null;
 
                 readEnumerator.Current.StartRead();
             }
@@ -63,8 +62,7 @@ namespace MapFarce
     }
 
 
-    public abstract class DataType<DataItem, DataField>
-        where DataItem : DataItem<DataField>
+    public abstract class DataType<DataField>
         where DataField : IDataField
     {
         public abstract string Name { get; }
@@ -86,37 +84,40 @@ namespace MapFarce
     }
 
 
-    public abstract class DataItem
+    public class DataItem
     {
-        public abstract int FieldCount { get; }
-        public abstract IDataField GetField(int i);
-        public abstract object GetValue(int i);
-    }
-
-
-    public abstract class DataItem<DataField> : DataItem
-        where DataField : IDataField
-    {
-        protected IList<DataField> Fields { get; set; }
-
-        public override int FieldCount { get { return Fields.Count; } }
-        public override IDataField GetField(int i) { return (IDataField)Fields[i]; }
-
-        public abstract object GetValue(DataField field);
-
-        public override object GetValue(int i)
+        public DataItem(int fieldCount)
         {
-            return GetValue(Fields[i]);
+            FieldCount = fieldCount;
+            Values = new SortedList<IDataField, object>(FieldCount);
         }
+
+        public int FieldCount { get; private set; }
+        public IDataField GetField(int i) { return Values.Keys[i]; }
+        
+        public object GetValue(IDataField field)
+        {
+            return Values[field];
+        }
+
+        public object GetValue(int i)
+        {
+            return Values.Values[i];
+        }
+
+        public void AddValue(IDataField field, object value)
+        {
+            Values.Add(field, value);
+        }
+
+        SortedList<IDataField, object> Values;
     }
 
-
-    public interface IDataField
+    public interface IDataField : IComparable<IDataField>
     {
         string Name { get; }
         //Type Type { get; }
     }
-
 
     [System.AttributeUsage(System.AttributeTargets.Property)]
     public class UIEditableProperty : System.Attribute

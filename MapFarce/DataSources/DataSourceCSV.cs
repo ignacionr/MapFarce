@@ -13,7 +13,7 @@ using System.Collections;
 
 namespace MapFarce.DataSources
 {
-    public class DataSourceCSV : DataSource<DataSourceCSV.DataTypeCSV, DataSourceCSV.DataItemCSV, DataSourceCSV.DataFieldCSV>
+    public class DataSourceCSV : DataSource<DataSourceCSV.DataTypeCSV, DataSourceCSV.DataFieldCSV>
     {
         public override string Name { get { return File == null ? "CSV data" : File.Name; } }
 
@@ -55,7 +55,7 @@ namespace MapFarce.DataSources
         [UIEditableProperty("Whether or not spaces at the start & End of each field should be trimmed", "Format", true)]
         public bool TrimSpaces { get; set; }
 
-        public class DataTypeCSV : DataType<DataItemCSV, DataFieldCSV>
+        public class DataTypeCSV : DataType<DataFieldCSV>
         {
             private DataSourceCSV Source { get; set; }
             public override string Name { get { return "Rows"; } }
@@ -113,12 +113,18 @@ namespace MapFarce.DataSources
                 reader = null;
             }
 
-            public override DataItemCSV ReadNext()
+            public override DataItem ReadNext()
             {
                 if (!reader.ReadNextRecord())
                     return null;
 
-                return DataItemCSV.Read(reader, GetFields());
+                var fields = GetFields();
+                var item = new DataItem(fields.Count);
+                
+                for (int i = 0; i < reader.FieldCount; i++)
+                    item.AddValue(fields[i], reader[i]);
+
+                return item;
             }
 
             public override bool HasMoreData()
@@ -127,28 +133,7 @@ namespace MapFarce.DataSources
             }
         }
 
-        public class DataItemCSV : DataItem<DataFieldCSV>
-        {
-            public static DataItemCSV Read(CsvReader reader, IList<DataFieldCSV> fields)
-            {
-                var item = new DataItemCSV();
-                item.Fields = fields;
-                
-                for (int i = 0; i < reader.FieldCount; i++)
-                    item.Values.Add(fields[i], reader[i]);
-
-                return item;
-            }
-
-            public override object GetValue(DataFieldCSV field)
-            {
-                return Values[field];
-            }
-
-            SortedList<DataFieldCSV, string> Values = new SortedList<DataFieldCSV, string>();
-        }
-
-        public class DataFieldCSV : IDataField, IComparable<DataFieldCSV>
+        public class DataFieldCSV : IDataField//<DataFieldCSV>
         {
             public DataFieldCSV(int colNum, string name)
             {
@@ -160,9 +145,11 @@ namespace MapFarce.DataSources
             public Type Type { get { return typeof(string); } }
             public int ColumnNumber { get; private set; }
 
-            public int CompareTo(DataFieldCSV other)
+            public int CompareTo(IDataField other)
             {
-                return ColumnNumber.CompareTo(other.ColumnNumber);
+                if ( other is DataFieldCSV )
+                    return ColumnNumber.CompareTo((other as DataFieldCSV).ColumnNumber);
+                return 0;
             }
         }
 
