@@ -1,4 +1,4 @@
-﻿namespace MapFarce
+﻿namespace MapFarce.UI
 {
     partial class MainForm
     {
@@ -34,7 +34,7 @@
             this.openProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.projectPanel = new MapFarce.ProjectPanel();
+            this.projectPanel = new MapFarce.UI.ProjectPanel();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 

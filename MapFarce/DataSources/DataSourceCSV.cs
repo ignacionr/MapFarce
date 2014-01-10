@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Collections;
+using System.ComponentModel;
 using System.Data;
+using System.Data.Common;
 using System.Diagnostics;
 using System.Globalization;
-using System.Data.Common;
-using System.ComponentModel;
 using System.Runtime.Serialization;
-using System.Collections;
-using MapFarce.EditProperties;
 using System.Windows.Forms;
+using MapFarce.DataModel;
+using MapFarce.EditProperties;
 
 namespace MapFarce.DataSources
 {
@@ -55,25 +56,25 @@ namespace MapFarce.DataSources
             return new DataTypeCSV[] { new DataTypeCSV(this) };
         }
 
-        [UIEditableProperty(null, "The file to read from", "File")]
+        [UIEditablePropertyAttribute(null, "The file to read from", "File")]
         public FileInfo File { get; set; }
 
-        [UIEditableProperty("Has headers", "Whether or not the first row of the data contains column names", "Format")]
+        [UIEditablePropertyAttribute("Has headers", "Whether or not the first row of the data contains column names", "Format")]
         public bool HasHeaders { get; set; }
 
-        [UIEditableProperty("Delimiter char", "The character to be used to separate fields", "Format")]
+        [UIEditablePropertyAttribute("Delimiter char", "The character to be used to separate fields", "Format")]
         public char Delimiter { get; set; }
 
-        [UIEditableProperty("Quote char", "The quote character used for wrapping fields", "Format")]
+        [UIEditablePropertyAttribute("Quote char", "The quote character used for wrapping fields", "Format")]
         public char Quote { get; set; }
 
-        [UIEditableProperty("Escape char", "The character used to escape quotation characters inside a quoted field", "Format")]
+        [UIEditablePropertyAttribute("Escape char", "The character used to escape quotation characters inside a quoted field", "Format")]
         public char Escape { get; set; }
 
-        [UIEditableProperty("Comment char", "If used at the start of a line, indicates that this line is commented out, and should be ignored", "Format")]
+        [UIEditablePropertyAttribute("Comment char", "If used at the start of a line, indicates that this line is commented out, and should be ignored", "Format")]
         public char Comment { get; set; }
 
-        [UIEditableProperty("Trim spaces", "Whether or not spaces at the start & End of each field should be trimmed", "Format")]
+        [UIEditablePropertyAttribute("Trim spaces", "Whether or not spaces at the start & End of each field should be trimmed", "Format")]
         public bool TrimSpaces { get; set; }
 
         public class DataTypeCSV : DataType<DataSourceCSV, DataTypeCSV, DataFieldCSV>

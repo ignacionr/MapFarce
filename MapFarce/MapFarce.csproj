@@ -46,23 +46,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataItem.cs" />
-    <Compile Include="DataSource.cs" />
-    <Compile Include="DataSourceControl.cs">
+    <Compile Include="DataModel\DataField.cs" />
+    <Compile Include="DataModel\DataItem.cs" />
+    <Compile Include="DataModel\DataSource.cs" />
+    <Compile Include="UI\DataSourceControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="DataSourceControl.Designer.cs">
+    <Compile Include="UI\DataSourceControl.Designer.cs">
       <DependentUpon>DataSourceControl.cs</DependentUpon>
     </Compile>
     <Compile Include="DataSourceDescriptorAttribute.cs" />
-    <Compile Include="DataSourceEditPopup.cs">
+    <Compile Include="UI\DataSourceEditPopup.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DataSourceEditPopup.Designer.cs">
+    <Compile Include="UI\DataSourceEditPopup.Designer.cs">
       <DependentUpon>DataSourceEditPopup.cs</DependentUpon>
     </Compile>
     <Compile Include="DataSources\DataSourceCSV.cs" />
-    <Compile Include="DataType.cs" />
+    <Compile Include="DataModel\DataType.cs" />
     <Compile Include="EditProperties\BoolEditProperty.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -78,31 +79,31 @@
     <Compile Include="EditProperties\StringEditProperty.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="EditProperties\UIEditableProperty.cs" />
-    <Compile Include="MainForm.cs">
+    <Compile Include="EditProperties\UIEditablePropertyAttribute.cs" />
+    <Compile Include="UI\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainForm.Designer.cs">
+    <Compile Include="UI\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
-    <Compile Include="ProjectPanel.cs">
+    <Compile Include="UI\ProjectPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ProjectPanel.Designer.cs">
+    <Compile Include="UI\ProjectPanel.Designer.cs">
       <DependentUpon>ProjectPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="DataSourceControl.resx">
+    <EmbeddedResource Include="UI\DataSourceControl.resx">
       <DependentUpon>DataSourceControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="DataSourceEditPopup.resx">
+    <EmbeddedResource Include="UI\DataSourceEditPopup.resx">
       <DependentUpon>DataSourceEditPopup.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainForm.resx">
+    <EmbeddedResource Include="UI\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ProjectPanel.resx">
+    <EmbeddedResource Include="UI\ProjectPanel.resx">
       <DependentUpon>ProjectPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

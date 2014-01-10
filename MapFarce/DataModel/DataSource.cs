@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Data;
 
-namespace MapFarce
+namespace MapFarce.DataModel
 {
     public abstract class DataSource : IEnumerable<DataType>
     {

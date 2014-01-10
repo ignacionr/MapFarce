@@ -1,4 +1,4 @@
-﻿namespace MapFarce
+﻿namespace MapFarce.UI
 {
     partial class DataSourceControl
     {

@@ -9,8 +9,9 @@ using System.Windows.Forms;
 using System.Reflection;
 using System.IO;
 using MapFarce.DataSources;
+using MapFarce.DataModel;
 
-namespace MapFarce
+namespace MapFarce.UI
 {
     public partial class ProjectPanel : UserControl
     {

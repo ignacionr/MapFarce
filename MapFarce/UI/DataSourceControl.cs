@@ -6,8 +6,9 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using MapFarce.DataModel;
 
-namespace MapFarce
+namespace MapFarce.UI
 {
     public partial class DataSourceControl : UserControl
     {

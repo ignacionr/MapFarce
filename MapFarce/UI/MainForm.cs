@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using MapFarce.DataSources;
 using System.IO;
 
-namespace MapFarce
+namespace MapFarce.UI
 {
     public partial class MainForm : Form
     {

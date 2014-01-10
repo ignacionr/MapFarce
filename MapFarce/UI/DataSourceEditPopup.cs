@@ -10,7 +10,7 @@ using System.Reflection;
 using System.IO;
 using MapFarce.EditProperties;
 
-namespace MapFarce
+namespace MapFarce.UI
 {
     public partial class DataSourceEditPopup : Form
     {
@@ -28,11 +28,11 @@ namespace MapFarce
 
             foreach (var prop in source.Source.GetType().GetProperties())
             {
-                var attributes = prop.GetCustomAttributes(typeof(UIEditableProperty), false);
+                var attributes = prop.GetCustomAttributes(typeof(UIEditablePropertyAttribute), false);
                 if (attributes.Length == 0)
                     continue;
 
-                UIEditableProperty attrib = attributes[0] as UIEditableProperty;
+                UIEditablePropertyAttribute attrib = attributes[0] as UIEditablePropertyAttribute;
                 attrib.Property = prop;
 
                 GroupBox group;
@@ -61,7 +61,7 @@ namespace MapFarce
             return gb;
         }
 
-        private void AddEditControl(GroupBox group, UIEditableProperty attrib)
+        private void AddEditControl(GroupBox group, UIEditablePropertyAttribute attrib)
         {
             EditPropertyBase c;
             if (attrib.Property.PropertyType == typeof(FileInfo))
@@ -91,7 +91,7 @@ namespace MapFarce
             foreach (GroupBox group in flowLayoutPanel1.Controls)
                 foreach (EditPropertyBase control in group.Controls)
                 {
-                    var attribute = control.Tag as UIEditableProperty;
+                    var attribute = control.Tag as UIEditablePropertyAttribute;
                     attribute.Property.SetValue(source.Source, control.GetValue(), null);
                 }
 
