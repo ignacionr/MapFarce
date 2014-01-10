@@ -28,31 +28,21 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.lblName = new System.Windows.Forms.Label();
-            this.lnkEdit = new System.Windows.Forms.LinkLabel();
+            this.lblName = new System.Windows.Forms.LinkLabel();
             this.treeView = new System.Windows.Forms.TreeView();
             this.SuspendLayout();
             // 
             // lblName
             // 
+            this.lblName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblName.AutoSize = true;
             this.lblName.Location = new System.Drawing.Point(3, 3);
             this.lblName.Name = "lblName";
             this.lblName.Size = new System.Drawing.Size(35, 13);
-            this.lblName.TabIndex = 0;
+            this.lblName.TabIndex = 1;
+            this.lblName.TabStop = true;
             this.lblName.Text = "Name";
-            // 
-            // lnkEdit
-            // 
-            this.lnkEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lnkEdit.AutoSize = true;
-            this.lnkEdit.Location = new System.Drawing.Point(121, 3);
-            this.lnkEdit.Name = "lnkEdit";
-            this.lnkEdit.Size = new System.Drawing.Size(24, 13);
-            this.lnkEdit.TabIndex = 1;
-            this.lnkEdit.TabStop = true;
-            this.lnkEdit.Text = "edit";
-            this.lnkEdit.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkEdit_LinkClicked);
+            this.lblName.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkEdit_LinkClicked);
             // 
             // treeView
             // 
@@ -66,9 +56,9 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.ControlLight;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Controls.Add(this.treeView);
-            this.Controls.Add(this.lnkEdit);
             this.Controls.Add(this.lblName);
             this.Name = "DataSourceControl";
             this.Size = new System.Drawing.Size(148, 148);
@@ -79,8 +69,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Label lblName;
-        private System.Windows.Forms.LinkLabel lnkEdit;
+        private System.Windows.Forms.LinkLabel lblName;
         private System.Windows.Forms.TreeView treeView;
     }
 }
