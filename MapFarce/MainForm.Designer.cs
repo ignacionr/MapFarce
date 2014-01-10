@@ -1,6 +1,6 @@
 ﻿namespace MapFarce
 {
-    partial class Form1
+    partial class MainForm
     {
         /// <summary>
         /// Required designer variable.
@@ -86,22 +86,23 @@
             // 
             // projectPanel
             // 
+            this.projectPanel.AutoScroll = true;
             this.projectPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.projectPanel.Location = new System.Drawing.Point(0, 24);
             this.projectPanel.Name = "projectPanel";
-            this.projectPanel.Size = new System.Drawing.Size(589, 177);
+            this.projectPanel.Size = new System.Drawing.Size(589, 303);
             this.projectPanel.TabIndex = 5;
             // 
-            // Form1
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(589, 201);
+            this.ClientSize = new System.Drawing.Size(589, 327);
             this.Controls.Add(this.projectPanel);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.Name = "MainForm";
+            this.Text = "MapFarce";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
