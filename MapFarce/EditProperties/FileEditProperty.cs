@@ -13,13 +13,26 @@ namespace MapFarce.EditProperties
             : base(name)
         {
             tb = new TextBox();
-            tb.Width = 140;
+            tb.Width = HasLabel ? 142 : 225;
             Controls.Add(tb);
 
             b = new Button();
             b.Text = "Browse";
             b.Width = 70;
             Controls.Add(b);
+
+            b.Click += buttonClick;
+        }
+
+        void buttonClick(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = "All Files (*.*)|*.*";
+
+            if (ofd.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+                return;
+
+            tb.Text = ofd.FileName;
         }
 
         TextBox tb;
@@ -35,7 +48,7 @@ namespace MapFarce.EditProperties
 
         public override void SetValue(object val)
         {
-            tb.Text = val.ToString();
+            tb.Text = val == null ? string.Empty : val.ToString();
         }
 
         public override object GetValue()

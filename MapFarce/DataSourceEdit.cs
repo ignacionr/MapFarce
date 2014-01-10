@@ -65,18 +65,18 @@ namespace MapFarce
         {
             EditPropertyBase c;
             if (attrib.Property.PropertyType == typeof(FileInfo))
-                c = new FileEditProperty(attrib.Property.Name);
+                c = new FileEditProperty(attrib.Label);
             else if (attrib.Property.PropertyType == typeof(bool))
-                c = new BoolEditProperty(attrib.Property.Name);
+                c = new BoolEditProperty(attrib.Label);
             else if (attrib.Property.PropertyType == typeof(char))
-                c = new CharEditProperty(attrib.Property.Name);
+                c = new CharEditProperty(attrib.Label);
             else if (attrib.Property.PropertyType == typeof(string))
-                c = new StringEditProperty(attrib.Property.Name);
+                c = new StringEditProperty(attrib.Label);
             else
                 throw new NotImplementedException("Not configured to edit " + attrib.Property.PropertyType.Name + " properties!");
 
             c.SetValue(attrib.Property.GetValue(source.Source, null));
-            c.SetToolTip(toolTip1, attrib.Description);
+            c.SetToolTip(toolTip1, attrib.Tooltip);
 
             c.Tag = attrib;
             c.Left = groupBoxPadding.Left;

@@ -12,7 +12,7 @@ namespace MapFarce.EditProperties
             : base(name)
         {
             tb = new TextBox();
-            tb.Width = 200;
+            tb.Width = HasLabel ? 218 : 300;
             Controls.Add(tb);
         }
 
@@ -26,7 +26,7 @@ namespace MapFarce.EditProperties
 
         public override void SetValue(object val)
         {
-            tb.Text = val.ToString();
+            tb.Text = val == null ? string.Empty : val.ToString();
         }
 
         public override object GetValue()

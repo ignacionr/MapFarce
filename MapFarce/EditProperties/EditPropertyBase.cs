@@ -22,13 +22,15 @@ namespace MapFarce.EditProperties
 
                 label.AutoSize = false;
                 label.Width = 80;
-                label.Margin = new Padding(2,6,0,0);
+                label.Margin = new Padding(2, 6, 0, 0);
 
                 Controls.Add(label);
+                HasLabel = true;
             }
         }
 
         Label label;
+        protected bool HasLabel { get; private set; }
 
         public virtual void SetToolTip(ToolTip tip, string text)
         {

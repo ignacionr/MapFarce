@@ -35,25 +35,25 @@ namespace MapFarce.DataSources
             return new DataTypeCSV[] { new DataTypeCSV(this) };
         }
 
-        [UIEditableProperty("The file to read from", "File", true)]
+        [UIEditableProperty(null, "The file to read from", "File")]
         public FileInfo File { get; set; }
 
-        [UIEditableProperty("Whether or not the first row of the data contains column names", "Format", true)]
+        [UIEditableProperty("Has headers", "Whether or not the first row of the data contains column names", "Format")]
         public bool HasHeaders { get; set; }
 
-        [UIEditableProperty("The character to be used to separate fields", "Format", true)]
+        [UIEditableProperty("Delimiter char", "The character to be used to separate fields", "Format")]
         public char Delimiter { get; set; }
 
-        [UIEditableProperty("The quote character used for wrapping fields", "Format", true)]
+        [UIEditableProperty("Quote char", "The quote character used for wrapping fields", "Format")]
         public char Quote { get; set; }
 
-        [UIEditableProperty("The character used to escape quotation characters inside a quoted field", "Format", true)]
+        [UIEditableProperty("Escape char", "The character used to escape quotation characters inside a quoted field", "Format")]
         public char Escape { get; set; }
 
-        [UIEditableProperty("If used at the start of a line, indicates that this line is commented out, and should be ignored", "Format", true)]
+        [UIEditableProperty("Comment char", "If used at the start of a line, indicates that this line is commented out, and should be ignored", "Format")]
         public char Comment { get; set; }
 
-        [UIEditableProperty("Whether or not spaces at the start & End of each field should be trimmed", "Format", true)]
+        [UIEditableProperty("Trim spaces", "Whether or not spaces at the start & End of each field should be trimmed", "Format")]
         public bool TrimSpaces { get; set; }
 
         public class DataTypeCSV : DataType<DataFieldCSV>
