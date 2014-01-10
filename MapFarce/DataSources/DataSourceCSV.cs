@@ -11,23 +11,43 @@ using System.ComponentModel;
 using System.Runtime.Serialization;
 using System.Collections;
 using MapFarce.EditProperties;
+using System.Windows.Forms;
 
 namespace MapFarce.DataSources
 {
+    [DataSourceDescriptor("CSV")]
     public class DataSourceCSV : DataSource<DataSourceCSV.DataTypeCSV, DataSourceCSV.DataFieldCSV>
     {
         public override string Name { get { return File == null ? "CSV data" : File.Name; } }
 
-        public DataSourceCSV(FileInfo fi)
+        public DataSourceCSV()
         {
-            File = fi;
-
+            File = null;
             Delimiter = CsvReader.DefaultDelimiter;
             Quote = CsvReader.DefaultQuote;
             Escape = CsvReader.DefaultEscape;
             Comment = CsvReader.DefaultComment;
             HasHeaders = true;
             TrimSpaces = true;
+        }
+
+        public override bool InitializeNew()
+        {
+            FileDialog dialog;
+            if (DataMode == Mode.Input)
+                dialog = new OpenFileDialog();
+            else if (DataMode == Mode.Output)
+                dialog = new SaveFileDialog();
+            else
+                throw new Exception("Unexpected DataSource Mode: " + DataMode);
+
+            dialog.Filter = "CSV Files|*.csv|All Files (*.*)|*.*";
+
+            if (dialog.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+                return false;
+
+            File = new FileInfo(dialog.FileName);
+            return true;
         }
 
         protected override IList<DataTypeCSV> RetrieveDataTypes()

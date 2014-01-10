@@ -9,6 +9,9 @@ namespace MapFarce
     public abstract class DataSource
     {
         public abstract string Name { get; }
+        public Mode DataMode { get; set; }
+        public abstract bool InitializeNew();
+
         public abstract IList<DataType> GetDataTypesBase();
 
         public abstract void BeginRead();
@@ -16,6 +19,12 @@ namespace MapFarce
         public abstract void FinishRead();
 
         public abstract void PropertiesChanged();
+
+        public enum Mode
+        {
+            Input,
+            Output,
+        }
     }
 
     public abstract class DataSource<Data, Field> : DataSource

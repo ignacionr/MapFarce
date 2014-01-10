@@ -18,6 +18,12 @@ namespace MapFarce
             InitializeComponent();
         }
 
+        private void newProjectToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        /*
         private void btnCreate_Click(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
@@ -74,5 +80,6 @@ namespace MapFarce
 
             dataGridView1.DataSource = dt;
         }
+        */
     }
 }
