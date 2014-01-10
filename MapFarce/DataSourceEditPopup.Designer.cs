@@ -1,6 +1,6 @@
 ﻿namespace MapFarce
 {
-    partial class DataSourceEdit
+    partial class DataSourceEditPopup
     {
         /// <summary>
         /// Required designer variable.

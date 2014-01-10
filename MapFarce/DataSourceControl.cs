@@ -54,7 +54,7 @@ namespace MapFarce
             if (Source == null)
                 return;
 
-            var editor = new DataSourceEdit();
+            var editor = new DataSourceEditPopup();
             editor.Populate(this);
             editor.ShowDialog();
         }

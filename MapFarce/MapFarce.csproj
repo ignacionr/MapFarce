@@ -54,11 +54,11 @@
       <DependentUpon>DataSourceControl.cs</DependentUpon>
     </Compile>
     <Compile Include="DataSourceDescriptorAttribute.cs" />
-    <Compile Include="DataSourceEdit.cs">
+    <Compile Include="DataSourceEditPopup.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DataSourceEdit.Designer.cs">
-      <DependentUpon>DataSourceEdit.cs</DependentUpon>
+    <Compile Include="DataSourceEditPopup.Designer.cs">
+      <DependentUpon>DataSourceEditPopup.cs</DependentUpon>
     </Compile>
     <Compile Include="DataSources\DataSourceCSV.cs" />
     <Compile Include="EditProperties\BoolEditProperty.cs">
@@ -94,8 +94,8 @@
     <EmbeddedResource Include="DataSourceControl.resx">
       <DependentUpon>DataSourceControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="DataSourceEdit.resx">
-      <DependentUpon>DataSourceEdit.cs</DependentUpon>
+    <EmbeddedResource Include="DataSourceEditPopup.resx">
+      <DependentUpon>DataSourceEditPopup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>

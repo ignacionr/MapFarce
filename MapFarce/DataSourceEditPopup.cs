@@ -12,9 +12,9 @@ using MapFarce.EditProperties;
 
 namespace MapFarce
 {
-    public partial class DataSourceEdit : Form
+    public partial class DataSourceEditPopup : Form
     {
-        public DataSourceEdit()
+        public DataSourceEditPopup()
         {
             InitializeComponent();
         }
