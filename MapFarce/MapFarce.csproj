@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataItem.cs" />
     <Compile Include="DataSource.cs" />
     <Compile Include="DataSourceControl.cs">
       <SubType>UserControl</SubType>
@@ -61,6 +62,7 @@
       <DependentUpon>DataSourceEditPopup.cs</DependentUpon>
     </Compile>
     <Compile Include="DataSources\DataSourceCSV.cs" />
+    <Compile Include="DataType.cs" />
     <Compile Include="EditProperties\BoolEditProperty.cs">
       <SubType>Component</SubType>
     </Compile>
