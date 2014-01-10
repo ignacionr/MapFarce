@@ -16,7 +16,7 @@ using System.Windows.Forms;
 namespace MapFarce.DataSources
 {
     [DataSourceDescriptor("CSV")]
-    public class DataSourceCSV : DataSource<DataSourceCSV.DataTypeCSV, DataSourceCSV.DataFieldCSV>
+    public class DataSourceCSV : DataSource<DataSourceCSV, DataSourceCSV.DataTypeCSV, DataSourceCSV.DataFieldCSV>
     {
         public override string Name { get { return File == null ? "CSV data" : File.Name; } }
 
@@ -76,14 +76,13 @@ namespace MapFarce.DataSources
         [UIEditableProperty("Trim spaces", "Whether or not spaces at the start & End of each field should be trimmed", "Format")]
         public bool TrimSpaces { get; set; }
 
-        public class DataTypeCSV : DataType<DataFieldCSV>
+        public class DataTypeCSV : DataType<DataSourceCSV, DataTypeCSV, DataFieldCSV>
         {
-            private DataSourceCSV Source { get; set; }
             public override string Name { get { return "Rows"; } }
 
             public DataTypeCSV(DataSourceCSV source)
+                : base(source)
             {
-                Source = source;
             }
 
             private CsvReader CreateReader()
@@ -123,7 +122,7 @@ namespace MapFarce.DataSources
             }
 
             CsvReader reader;
-            public override void StartRead()
+            public override void BeginRead()
             {
                 reader = CreateReader();
             }
@@ -134,7 +133,7 @@ namespace MapFarce.DataSources
                 reader = null;
             }
 
-            public override DataItem ReadNext()
+            protected override DataItem ReadNext()
             {
                 if (!reader.ReadNextRecord())
                     return null;
@@ -154,7 +153,7 @@ namespace MapFarce.DataSources
             }
         }
 
-        public class DataFieldCSV : IDataField//<DataFieldCSV>
+        public class DataFieldCSV : DataField
         {
             public DataFieldCSV(int colNum, string name)
             {
@@ -162,11 +161,11 @@ namespace MapFarce.DataSources
                 Name = name;
             }
 
-            public string Name { get; private set; }
+            public override string Name { get; protected set; }
             public Type Type { get { return typeof(string); } }
             public int ColumnNumber { get; private set; }
 
-            public int CompareTo(IDataField other)
+            public override int CompareTo(DataField other)
             {
                 if ( other is DataFieldCSV )
                     return ColumnNumber.CompareTo((other as DataFieldCSV).ColumnNumber);

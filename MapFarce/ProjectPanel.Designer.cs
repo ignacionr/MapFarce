@@ -31,6 +31,7 @@
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.btnAddInput = new System.Windows.Forms.ToolStripDropDownButton();
             this.btnAddOutput = new System.Windows.Forms.ToolStripDropDownButton();
+            this.btnTestRead = new System.Windows.Forms.ToolStripButton();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -38,7 +39,8 @@
             // 
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnAddInput,
-            this.btnAddOutput});
+            this.btnAddOutput,
+            this.btnTestRead});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(551, 25);
@@ -61,10 +63,21 @@
             this.btnAddOutput.Size = new System.Drawing.Size(81, 22);
             this.btnAddOutput.Text = "Add &output";
             // 
+            // btnTestRead
+            // 
+            this.btnTestRead.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnTestRead.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnTestRead.Margin = new System.Windows.Forms.Padding(20, 1, 0, 2);
+            this.btnTestRead.Name = "btnTestRead";
+            this.btnTestRead.Size = new System.Drawing.Size(59, 22);
+            this.btnTestRead.Text = "Test read";
+            this.btnTestRead.Click += new System.EventHandler(this.btnTestRead_Click);
+            // 
             // ProjectPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
             this.Controls.Add(this.toolStrip);
             this.Name = "ProjectPanel";
             this.Size = new System.Drawing.Size(551, 291);
@@ -81,5 +94,6 @@
         private System.Windows.Forms.ToolStrip toolStrip;
         private System.Windows.Forms.ToolStripDropDownButton btnAddInput;
         private System.Windows.Forms.ToolStripDropDownButton btnAddOutput;
+        private System.Windows.Forms.ToolStripButton btnTestRead;
     }
 }

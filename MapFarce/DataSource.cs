@@ -6,17 +6,46 @@ using System.Data;
 
 namespace MapFarce
 {
-    public abstract class DataSource
+    public abstract class DataSource : IEnumerable<DataType>
     {
         public abstract string Name { get; }
         public Mode DataMode { get; set; }
         public abstract bool InitializeNew();
 
-        public abstract IList<DataType> GetDataTypesBase();
+        public abstract IEnumerator<DataType> GetEnumerator();
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() { return GetEnumerator(); }
 
-        public abstract void BeginRead();
-        public abstract DataItem ReadNextItem();
-        public abstract void FinishRead();
+        public virtual void BeginRead()
+        {
+            Active = this;
+        }
+        public virtual void FinishRead()
+        {
+            Active = null;
+        }
+
+        public virtual void BeginWrite()
+        {
+            Active = this;
+        }
+        public virtual void FinishWrite()
+        {
+            Active = null;
+        }
+
+        public DataSet ReadDataSet()
+        {
+            DataSet ds = new DataSet();
+
+            BeginRead();
+
+            foreach (var type in this)
+                ds.Tables.Add(type.ReadDataTable());
+
+            FinishRead();
+
+            return ds;
+        }
 
         public abstract void PropertiesChanged();
 
@@ -25,99 +54,113 @@ namespace MapFarce
             Input,
             Output,
         }
+
+        public static DataSource Active { get; set; }
     }
 
-    public abstract class DataSource<Data, Field> : DataSource
-        where Data : DataType<Field>
-        where Field : IDataField
+    public abstract class DataSource<Source, Data, Field> : DataSource
+        where Source : DataSource<Source, Data, Field>
+        where Data : DataType<Source, Data, Field>
+        where Field : DataField
     {
         protected abstract IList<Data> RetrieveDataTypes();
-        private IList<Data> DataTypes;
-        public IList<Data> GetDataTypes()
+        protected IList<Data> DataTypes;
+
+        public override IEnumerator<DataType> GetEnumerator()
         {
             if (DataTypes == null)
                 DataTypes = RetrieveDataTypes();
-            return DataTypes;
+            return DataTypes.GetEnumerator();
         }
-
-        public override IList<DataType> GetDataTypesBase()
-        {
-            var types = GetDataTypes();
-            List<DataType> typesBase = new List<DataType>(types.Count);
-            foreach (var type in types)
-                typesBase.Add(type);
-            return typesBase;
-        }
-
+        
         public override void PropertiesChanged()
         {
             // i guess the available data types would change if the properties change.
             // I don't see how we'd keep data connections hooked up if the data types are completely replaced.
             // will hold off for now.
             //DataTypes = null;
-            foreach (var type in GetDataTypes())
+            foreach (var type in this)
                 type.SourceChanged();
         }
 
-        IEnumerator<Data> readEnumerator;
         public override void BeginRead()
         {
-            readEnumerator = GetDataTypes().GetEnumerator();
-            readEnumerator.MoveNext();
-            readEnumerator.Current.StartRead();
+            if (DataTypes == null)
+                DataTypes = RetrieveDataTypes();
         }
-        
-        public override DataItem ReadNextItem()
-        {
-            return ReadNext();
-        }
-        
-        public DataItem ReadNext()
-        {
-            while (!readEnumerator.Current.HasMoreData())
-            {
-                readEnumerator.Current.FinishRead();
-                if (!readEnumerator.MoveNext())
-                    return null;
+    }
 
-                readEnumerator.Current.StartRead();
+    public abstract class DataType : IEnumerable<DataField>
+    {
+        public abstract DataSource SourceBase { get; }
+        public abstract string Name { get; }
+        public abstract void SourceChanged();
+
+        public abstract IEnumerator<DataField> GetEnumerator();
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() { return GetEnumerator(); }
+
+        public abstract IEnumerable<DataItem> ReadData();
+
+        public virtual void BeginRead()
+        {
+            if (DataSource.Active != SourceBase)
+                SourceBase.BeginRead();
+        }
+        public virtual void FinishRead() { }
+
+        public virtual void BeginWrite()
+        {
+            if (DataSource.Active != SourceBase)
+                SourceBase.BeginWrite();
+        }
+        public virtual void FinishWrite() { }
+
+        public DataTable ReadDataTable()
+        {
+            BeginRead();
+
+            DataTable dt = new DataTable();
+            foreach (var field in this)
+                dt.Columns.Add(field.Name);
+
+            foreach (var item in ReadData())
+            {
+                var values = new List<object>();
+                for (int i = 0; i < dt.Columns.Count; i++)
+                    values.Add(item.GetValue(i));
+                dt.Rows.Add(values.ToArray());
             }
 
-            return readEnumerator.Current.ReadNext();
+            FinishRead();
+            return dt;
         }
+    }
 
-        public override void FinishRead()
+    public abstract class DataType<SourceType, Data, Field> : DataType
+        where SourceType : DataSource<SourceType, Data, Field>
+        where Data : DataType<SourceType, Data, Field>
+        where Field : DataField
+    {
+        protected DataType(SourceType source)
         {
-            readEnumerator = null;
+            Source = source;
         }
-    }
 
-    public abstract class DataType
-    {
-        public abstract string Name { get; }
-        public abstract IList<IDataField> GetFieldsBase();
-        public abstract void SourceChanged();
-    }
+        public override DataSource SourceBase { get { return Source; } }
+        public SourceType Source { get; protected set; }
 
-    public abstract class DataType<Data> : DataType
-        where Data : IDataField
-    {
-        protected abstract IList<Data> RetrieveFields();
-        private IList<Data> Fields;
-        public IList<Data> GetFields()
+        protected abstract IList<Field> RetrieveFields();
+        private IList<Field> Fields;
+        public IList<Field> GetFields()
         {
             if (Fields == null)
                 Fields = RetrieveFields();
             return Fields;
         }
 
-        public override IList<IDataField> GetFieldsBase()
+        public override IEnumerator<DataField> GetEnumerator()
         {
-            var fields = GetFields();
-            List<IDataField> fieldsBase = new List<IDataField>(fields.Count);
-            foreach (var field in fields)
-                fieldsBase.Add(field);
-            return fieldsBase;
+            return GetFields().GetEnumerator();
         }
 
         public override void SourceChanged()
@@ -125,10 +168,13 @@ namespace MapFarce
             Fields = null; // let these be reloaded
         }
 
-        public abstract void StartRead();
-        public abstract void FinishRead();
+        public override IEnumerable<DataItem> ReadData()
+        {
+            while (HasMoreData())
+                yield return ReadNext();
+        }
 
-        public abstract DataItem ReadNext();
+        protected abstract DataItem ReadNext();
         public abstract bool HasMoreData();
     }
 
@@ -138,13 +184,13 @@ namespace MapFarce
         public DataItem(int fieldCount)
         {
             FieldCount = fieldCount;
-            Values = new SortedList<IDataField, object>(FieldCount);
+            Values = new SortedList<DataField, object>(FieldCount);
         }
 
         public int FieldCount { get; private set; }
-        public IDataField GetField(int i) { return Values.Keys[i]; }
+        public DataField GetField(int i) { return Values.Keys[i]; }
         
-        public object GetValue(IDataField field)
+        public object GetValue(DataField field)
         {
             return Values[field];
         }
@@ -154,17 +200,19 @@ namespace MapFarce
             return Values.Values[i];
         }
 
-        public void AddValue(IDataField field, object value)
+        public void AddValue(DataField field, object value)
         {
             Values.Add(field, value);
         }
 
-        SortedList<IDataField, object> Values;
+        SortedList<DataField, object> Values;
     }
 
-    public interface IDataField : IComparable<IDataField>
+    public abstract class DataField : IComparable<DataField>
     {
-        string Name { get; }
+        public abstract string Name { get; protected set; }
         //Type Type { get; }
+
+        public abstract int CompareTo(DataField other);
     }
 }

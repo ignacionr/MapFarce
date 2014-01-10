@@ -25,12 +25,12 @@ namespace MapFarce
 
             treeView.Nodes.Clear();
 
-            foreach (var type in source.GetDataTypesBase())
+            foreach (var type in source)
             {
                 TreeNode typeNode = new TreeNode();
                 typeNode.Text = type.Name;
 
-                foreach (var field in type.GetFieldsBase())
+                foreach (var field in type)
                 {
                     TreeNode fieldNode = new TreeNode();
                     fieldNode.Text = field.Name;

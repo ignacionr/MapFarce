@@ -74,6 +74,9 @@ namespace MapFarce
         Point dragStartLocation;
         void Draggable_MouseDown(object sender, MouseEventArgs e)
         {
+            if (e.Button != MouseButtons.Left)
+                return;
+
             Control c = sender as Control;
             c.BringToFront();
             draggingControl = c;
@@ -83,6 +86,9 @@ namespace MapFarce
 
         void Draggable_MouseUp(object sender, MouseEventArgs e)
         {
+            if (e.Button != MouseButtons.Left)
+                return;
+
             draggingControl = null;
             Cursor = Cursors.Default;
         }
@@ -95,6 +101,26 @@ namespace MapFarce
             var location = draggingControl.Location;
             location.Offset(e.Location.X - dragStartLocation.X, e.Location.Y - dragStartLocation.Y);
             draggingControl.Location = location;
+        }
+
+        private void btnTestRead_Click(object sender, EventArgs e)
+        {
+            DataSource source = null;
+            foreach ( Control c in Controls )
+                if (c is DataSourceControl)
+                {
+                    source = (c as DataSourceControl).Source;
+                    break;
+                }
+
+            if (source == null)
+                return;
+
+            DataSet ds = source.ReadDataSet();
+            DataGridView grid = new DataGridView();
+            grid.DataSource = ds.Tables[0];
+            grid.Location = new Point(16, 48);
+            Controls.Add(grid);
         }
     }
 }
