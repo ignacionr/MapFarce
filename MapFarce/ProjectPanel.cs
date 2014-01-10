@@ -59,6 +59,42 @@ namespace MapFarce
             sourceControl.Location = new Point(40, 40);
             Controls.Add(sourceControl);
             sourceControl.Populate(source);
+
+            MakeDraggable(sourceControl);
+        }
+
+        private void MakeDraggable(Control c)
+        {
+            c.MouseDown += Draggable_MouseDown;
+            c.MouseUp += Draggable_MouseUp;
+            c.MouseMove += Draggable_MouseMove;
+        }
+
+        Control draggingControl;
+        Point dragStartLocation;
+        void Draggable_MouseDown(object sender, MouseEventArgs e)
+        {
+            Control c = sender as Control;
+            c.BringToFront();
+            draggingControl = c;
+            Cursor = Cursors.SizeAll;
+            dragStartLocation = e.Location;
+        }
+
+        void Draggable_MouseUp(object sender, MouseEventArgs e)
+        {
+            draggingControl = null;
+            Cursor = Cursors.Default;
+        }
+
+        void Draggable_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (draggingControl != sender)
+                return;
+
+            var location = draggingControl.Location;
+            location.Offset(e.Location.X - dragStartLocation.X, e.Location.Y - dragStartLocation.Y);
+            draggingControl.Location = location;
         }
     }
 }
