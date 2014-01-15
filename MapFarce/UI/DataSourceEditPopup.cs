@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Reflection;
 using System.IO;
 using MapFarce.EditProperties;
+using MapFarce.DataModel;
 
 namespace MapFarce.UI
 {
@@ -44,6 +45,42 @@ namespace MapFarce.UI
 
                 AddEditControl(group, attrib);
             }
+
+            if (ShouldShowDataTypeTable())
+            {
+                GroupBox group = CreateGroupBox("Data Types");
+                AddDataTypeTable(group);
+            }
+        }
+
+        private bool ShouldShowDataTypeTable()
+        {
+            return source.Source.CanAddDataTypes || source.Source.NumDataTypes > 1;
+        }
+
+        CheckedListBox lstDataTypes = null;
+        private void AddDataTypeTable(GroupBox group)
+        {
+            lstDataTypes = new CheckedListBox();
+            group.Controls.Add(lstDataTypes);
+            lstDataTypes.Location = new Point(120, 10);
+            lstDataTypes.Size = new Size(185, 80);
+            
+            foreach (var type in source.Source)
+                lstDataTypes.Items.Add(type, type.IsEnabled);
+
+            if (lstDataTypes.Items.Count > 0)
+                lstDataTypes.SelectedIndex = 0;
+
+            if (source.Source.DataMode == DataSource.Mode.Output && source.Source.CanAddDataTypes)
+            {
+                LinkLabel lnkAddType = new LinkLabel();
+                lnkAddType.Text = "Add Data Type";
+                group.Controls.Add(lnkAddType);
+                lnkAddType.Location = new Point(4, 32);
+            }
+
+            group.Height = 96;
         }
 
         static Padding groupBoxMargin = new Padding(4, 4, 4, 0);
@@ -53,6 +90,7 @@ namespace MapFarce.UI
             GroupBox gb = new GroupBox();
             gb.Margin = groupBoxMargin;
             gb.Padding = groupBoxPadding;
+
             gb.Width = Width - groupBoxPadding.Horizontal - groupBoxMargin.Horizontal - 2;
             gb.Height = groupBoxPadding.Vertical;
             gb.Text = name;
@@ -95,6 +133,14 @@ namespace MapFarce.UI
                     attribute.Property.SetValue(source.Source, control.GetValue(), null);
                 }
 
+            if (lstDataTypes != null)
+            {
+                // only the checked types should be enabled
+                foreach (DataType type in lstDataTypes.Items)
+                    type.IsEnabled = false;
+                foreach (DataType type in lstDataTypes.CheckedItems)
+                    type.IsEnabled = true;
+            }
             source.Repopulate();
             source = null;
         }

@@ -49,6 +49,7 @@
     <Compile Include="DataModel\DataField.cs" />
     <Compile Include="DataModel\DataItem.cs" />
     <Compile Include="DataModel\DataSource.cs" />
+    <Compile Include="DataModel\FieldType.cs" />
     <Compile Include="UI\DataSourceControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -80,6 +81,12 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="EditProperties\UIEditablePropertyAttribute.cs" />
+    <Compile Include="UI\InputDataTypeEditPopup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\InputDataTypeEditPopup.Designer.cs">
+      <DependentUpon>InputDataTypeEditPopup.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -99,6 +106,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\DataSourceEditPopup.resx">
       <DependentUpon>DataSourceEditPopup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\InputDataTypeEditPopup.resx">
+      <DependentUpon>InputDataTypeEditPopup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

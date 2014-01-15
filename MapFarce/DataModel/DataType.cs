@@ -8,8 +8,17 @@ namespace MapFarce.DataModel
 {
     public abstract class DataType : IEnumerable<DataField>
     {
+        protected DataType()
+        {
+            IsEnabled = true;
+        }
+
         public abstract DataSource SourceBase { get; }
         public abstract string Name { get; }
+        public bool IsEnabled { get; set; }
+
+        public override string ToString() { return Name; }
+
         public abstract void SourceChanged();
 
         public abstract IEnumerator<DataField> GetEnumerator();

@@ -12,6 +12,9 @@ namespace MapFarce.DataModel
         public Mode DataMode { get; set; }
         public abstract bool InitializeNew();
 
+        public abstract bool CanAddDataTypes { get; }
+        public abstract int NumDataTypes { get; }
+
         public abstract IEnumerator<DataType> GetEnumerator();
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() { return GetEnumerator(); }
 
@@ -63,13 +66,27 @@ namespace MapFarce.DataModel
         where Data : DataType<Source, Data, Field>
         where Field : DataField
     {
-        protected abstract IList<Data> RetrieveDataTypes();
-        protected IList<Data> DataTypes;
-
-        public override IEnumerator<DataType> GetEnumerator()
+        private void EnsureDataTypes()
         {
             if (DataTypes == null)
                 DataTypes = RetrieveDataTypes();
+        }
+
+        protected abstract IList<Data> RetrieveDataTypes();
+        protected IList<Data> DataTypes;
+
+        public override int NumDataTypes
+        {
+            get
+            {
+                EnsureDataTypes();
+                return DataTypes.Count;
+            }
+        }
+
+        public override IEnumerator<DataType> GetEnumerator()
+        {
+            EnsureDataTypes();
             return DataTypes.GetEnumerator();
         }
         
@@ -85,8 +102,7 @@ namespace MapFarce.DataModel
 
         public override void BeginRead()
         {
-            if (DataTypes == null)
-                DataTypes = RetrieveDataTypes();
+            EnsureDataTypes();
         }
     }
 }

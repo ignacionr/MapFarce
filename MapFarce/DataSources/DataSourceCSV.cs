@@ -51,6 +51,8 @@ namespace MapFarce.DataSources
             return true;
         }
 
+        public override bool CanAddDataTypes { get { return false; } }
+
         protected override IList<DataTypeCSV> RetrieveDataTypes()
         {
             return new DataTypeCSV[] { new DataTypeCSV(this) };
@@ -157,20 +159,18 @@ namespace MapFarce.DataSources
         public class DataFieldCSV : DataField
         {
             public DataFieldCSV(int colNum, string name)
+                : base(name, FieldType.String)
             {
                 ColumnNumber = colNum;
-                Name = name;
             }
 
-            public override string Name { get; protected set; }
-            public Type Type { get { return typeof(string); } }
             public int ColumnNumber { get; private set; }
 
             public override int CompareTo(DataField other)
             {
                 if ( other is DataFieldCSV )
                     return ColumnNumber.CompareTo((other as DataFieldCSV).ColumnNumber);
-                return 0;
+                return Name.CompareTo(other.Name);
             }
         }
 

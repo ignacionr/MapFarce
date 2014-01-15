@@ -26,19 +26,30 @@ namespace MapFarce.UI
 
             treeView.Nodes.Clear();
 
+            ProjectPanel project = Parent as ProjectPanel;
+
             foreach (var type in source)
             {
+                if (!type.IsEnabled)
+                    continue;
+
                 TreeNode typeNode = new TreeNode();
+                typeNode.Tag = type;
                 typeNode.Text = type.Name;
 
                 foreach (var field in type)
                 {
                     TreeNode fieldNode = new TreeNode();
-                    fieldNode.Text = field.Name;
+                    fieldNode.Tag = field;
+                    fieldNode.Text = field.DisplayName;
                     typeNode.Nodes.Add(fieldNode);
                 }
 
                 treeView.Nodes.Add(typeNode);
+                if (source.DataMode == DataSource.Mode.Input)
+                    typeNode.ContextMenu = project.inputDataTypeRightClick;
+                else if (source.DataMode == DataSource.Mode.Output)
+                    typeNode.ContextMenu = project.outputDataTypeRightClick;
             }
 
             treeView.ExpandAll();
