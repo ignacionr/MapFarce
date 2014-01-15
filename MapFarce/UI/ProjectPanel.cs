@@ -18,50 +18,15 @@ namespace MapFarce.UI
         public ProjectPanel()
         {
             InitializeComponent();
+            ControlAdded += (o, e) => { MakeDraggable(e.Control); HasChanges = true; };
         }
 
-        private void ProjectPanel_Load(object sender, EventArgs e)
+        public bool HasChanges { get; set; }
+        
+        public void Reset()
         {
-            var types = typeof(DataSources.DataSourceCSV).Assembly.GetTypes()
-                .Where(t => t.IsSubclassOf(typeof(DataSource)))
-                .OrderBy(type => type.Name);
-
-            foreach (var type in types)
-            {
-                var attributes = type.GetCustomAttributes(typeof(DataSourceDescriptorAttribute), false);
-                if (attributes.Length == 0)
-                    continue;
-
-                DataSourceDescriptorAttribute attrib = attributes[0] as DataSourceDescriptorAttribute;
-                
-                ToolStripButton b = new ToolStripButton();
-                b.Text = attrib.Name;
-                b.Click += (s, a) => AddSource(DataSource.Mode.Input, attrib, type);
-
-                btnAddInput.DropDownItems.Add(b);
-
-
-                b = new ToolStripButton();
-                b.Text = attrib.Name;
-                b.Click += (s, a) => AddSource(DataSource.Mode.Output, attrib, type);
-
-                btnAddOutput.DropDownItems.Add(b);
-            }
-        }
-
-        private void AddSource(DataSource.Mode mode, DataSourceDescriptorAttribute attrib, Type type)
-        {
-            var source = Activator.CreateInstance(type) as DataSource;
-            source.DataMode = mode;
-            if (!source.InitializeNew())
-                return;
-            
-            var sourceControl = new DataSourceControl();
-            sourceControl.Location = new Point(40, 40);
-            Controls.Add(sourceControl);
-            sourceControl.Populate(source);
-
-            MakeDraggable(sourceControl);
+            Controls.Clear();
+            HasChanges = false;
         }
 
         private void MakeDraggable(Control c)
@@ -102,9 +67,23 @@ namespace MapFarce.UI
             var location = draggingControl.Location;
             location.Offset(e.Location.X - dragStartLocation.X, e.Location.Y - dragStartLocation.Y);
             draggingControl.Location = location;
+            HasChanges = true;
         }
 
-        private void btnTestRead_Click(object sender, EventArgs e)
+        public void AddSource(DataSource.Mode mode, DataSourceDescriptorAttribute attrib, Type type)
+        {
+            var source = Activator.CreateInstance(type) as DataSource;
+            source.DataMode = mode;
+            if (!source.InitializeNew())
+                return;
+
+            var sourceControl = new DataSourceControl();
+            sourceControl.Location = new Point(40, 40);
+            Controls.Add(sourceControl);
+            sourceControl.Populate(source);
+        }
+
+        public void TestRead()
         {
             DataSource source = null;
             foreach ( Control c in Controls )
