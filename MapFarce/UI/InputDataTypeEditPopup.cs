@@ -21,11 +21,11 @@ namespace MapFarce.UI
                 colFieldType.Items.Add(fieldType);
         }
 
-        private DataSourceControl source;
+        private TreeNode node;
         private DataType type;
-        public void Populate(DataSourceControl source, DataType type)
+        public void Populate(TreeNode node, DataType type)
         {
-            this.source = source;
+            this.node = node;
             this.type = type;
 
             fieldGrid.AllowUserToAddRows = fieldGrid.AllowUserToDeleteRows = false;
@@ -38,22 +38,40 @@ namespace MapFarce.UI
             {
                 int index = fieldGrid.Rows.Add();
                 var row = fieldGrid.Rows[index];
+                row.Tag = field;
 
-                row.Cells[0].Value = field.DisplayName;
-                row.Cells[1].Value = field.Type;
+                row.Cells[0].Value = field.Name;
+                row.Cells[1].Value = field.DisplayName;
+                row.Cells[2].Value = field.Type;
             }
+
+            fieldGrid.CellValueChanged += fieldGrid_CellValueChanged;
         }
 
-        class FieldChange
+        SortedList<DataField, string> FieldChanges = new SortedList<DataField, string>();
+
+        private void fieldGrid_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            DataType Type { get; set; }
-            DataField Existing { get; set; }
+            var row = fieldGrid.Rows[e.RowIndex];
+            var val = row.Cells[e.ColumnIndex].Value.ToString();
 
-            public string NewName { get; set; }
-            public DataType NewType { get; set; }
-            public int NewPosition { get; set; }
+            FieldChanges[row.Tag as DataField] = val;
         }
 
-        List<FieldChange> FieldChanges = new List<FieldChange>();
+        private void btnOK_Click(object sender, EventArgs e)
+        {
+            foreach (var kvp in FieldChanges)
+            {
+                kvp.Key.DisplayName = kvp.Value;
+
+                for ( int i=0; i<node.Nodes.Count; i++ )
+                {
+                    var fieldNode = node.Nodes[i];
+                    if ( fieldNode.Tag == kvp.Key )
+                        fieldNode.Text = kvp.Value;
+                }
+            }
+            Close();
+        }
     }
 }

@@ -17,6 +17,8 @@ namespace MapFarce.UI
             InitializeComponent();
         }
 
+        ContextMenu dataTypeRightClick;
+
         public DataSource Source { get; private set; }
 
         public void Populate(DataSource source)
@@ -26,7 +28,16 @@ namespace MapFarce.UI
 
             treeView.Nodes.Clear();
 
-            ProjectPanel project = Parent as ProjectPanel;
+            dataTypeRightClick = new ContextMenu();
+            if (source.DataMode == DataSource.Mode.Input)
+            {
+                dataTypeRightClick.MenuItems.Add(new MenuItem("&Edit data type", (o, e) => ShowInputDataTypeEdit()));
+                dataTypeRightClick.MenuItems.Add(new MenuItem("&View data", (o, e) => MessageBox.Show("not implemented")));
+            }
+            else
+            {
+                dataTypeRightClick.MenuItems.Add(new MenuItem("&Edit data type", (o, e) => MessageBox.Show("not implemented")));
+            }
 
             foreach (var type in source)
             {
@@ -46,13 +57,26 @@ namespace MapFarce.UI
                 }
 
                 treeView.Nodes.Add(typeNode);
-                if (source.DataMode == DataSource.Mode.Input)
-                    typeNode.ContextMenu = project.inputDataTypeRightClick;
-                else if (source.DataMode == DataSource.Mode.Output)
-                    typeNode.ContextMenu = project.outputDataTypeRightClick;
+                typeNode.ContextMenu = dataTypeRightClick;
             }
 
             treeView.ExpandAll();
+        }
+
+        private void ShowInputDataTypeEdit()
+        {
+            var node = treeView.SelectedNode;
+            if (node == null)
+                return;
+
+            if (!(node.Tag is DataType))
+                return;
+
+            var type = node.Tag as DataType;
+            var popup = new InputDataTypeEditPopup();
+
+            popup.Populate(node, type);
+            popup.ShowDialog();
         }
 
         public void Repopulate()

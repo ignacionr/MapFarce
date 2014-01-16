@@ -19,13 +19,6 @@ namespace MapFarce.UI
         {
             InitializeComponent();
             ControlAdded += (o, e) => { MakeDraggable(e.Control); HasChanges = true; };
-
-            inputDataTypeRightClick = new ContextMenu();
-            inputDataTypeRightClick.MenuItems.Add(new MenuItem("&Edit data type", (o, e) => MessageBox.Show("not implemented")));
-            inputDataTypeRightClick.MenuItems.Add(new MenuItem("&View data", (o, e) => MessageBox.Show("not implemented")));
-
-            outputDataTypeRightClick = new ContextMenu();
-            outputDataTypeRightClick.MenuItems.Add(new MenuItem("&Edit data type", (o, e) => MessageBox.Show("not implemented")));
         }
 
         public bool HasChanges { get; set; }
