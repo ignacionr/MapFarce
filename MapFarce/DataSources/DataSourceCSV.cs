@@ -106,6 +106,9 @@ namespace MapFarce.DataSources
 
             protected override List<DataFieldCSV> RetrieveFields()
             {
+                if ( Source.DataMode == Mode.Output )
+                    return new List<DataFieldCSV>();
+
                 var reader = CreateReader();
                 var fields = new List<DataFieldCSV>();
 

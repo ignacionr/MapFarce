@@ -29,14 +29,15 @@ namespace MapFarce.UI
             treeView.Nodes.Clear();
 
             dataTypeRightClick = new ContextMenu();
+            dataTypeRightClick.MenuItems.Add(new MenuItem("&Edit data type", (o, e) => ShowDataTypeEdit()));
+
             if (source.DataMode == DataSource.Mode.Input)
             {
-                dataTypeRightClick.MenuItems.Add(new MenuItem("&Edit data type", (o, e) => ShowInputDataTypeEdit()));
                 dataTypeRightClick.MenuItems.Add(new MenuItem("&View data", (o, e) => MessageBox.Show("not implemented")));
             }
             else
             {
-                dataTypeRightClick.MenuItems.Add(new MenuItem("&Edit data type", (o, e) => MessageBox.Show("not implemented")));
+
             }
 
             foreach (var type in source)
@@ -71,7 +72,7 @@ namespace MapFarce.UI
 
         }
 
-        private void ShowInputDataTypeEdit()
+        private void ShowDataTypeEdit()
         {
             var node = treeView.SelectedNode;
             if (node == null)

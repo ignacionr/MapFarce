@@ -90,6 +90,7 @@ namespace MapFarce.DataModel
             if (Fields == null)
             {
                 Fields = RetrieveFields();
+
                 for (int i = 0; i < Fields.Count; i++)
                     Fields[i].FieldNumber = i + 1;
             }
