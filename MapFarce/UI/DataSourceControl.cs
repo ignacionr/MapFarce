@@ -48,19 +48,27 @@ namespace MapFarce.UI
                 typeNode.Tag = type;
                 typeNode.Text = type.Name;
 
-                foreach (var field in type)
-                {
-                    TreeNode fieldNode = new TreeNode();
-                    fieldNode.Tag = field;
-                    fieldNode.Text = field.DisplayName;
-                    typeNode.Nodes.Add(fieldNode);
-                }
+                PopulateTypeTree(type, typeNode);
 
                 treeView.Nodes.Add(typeNode);
                 typeNode.ContextMenu = dataTypeRightClick;
             }
 
             treeView.ExpandAll();
+        }
+
+        public static void PopulateTypeTree(DataType type, TreeNode typeNode)
+        {
+            typeNode.Nodes.Clear();
+
+            foreach (var field in type)
+            {
+                TreeNode fieldNode = new TreeNode();
+                fieldNode.Tag = field;
+                fieldNode.Text = field.DisplayName;
+                typeNode.Nodes.Add(fieldNode);
+            }
+
         }
 
         private void ShowInputDataTypeEdit()
@@ -73,9 +81,9 @@ namespace MapFarce.UI
                 return;
 
             var type = node.Tag as DataType;
-            var popup = new InputDataTypeEditPopup();
+            var popup = new DataTypeEditPopup();
 
-            popup.Populate(node, type);
+            popup.Populate(Source, node, type);
             popup.ShowDialog();
         }
 

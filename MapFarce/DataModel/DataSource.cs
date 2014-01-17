@@ -13,6 +13,8 @@ namespace MapFarce.DataModel
         public abstract bool InitializeNew();
 
         public abstract bool CanAddDataTypes { get; }
+        public abstract bool CanEditTypeFields { get; }
+
         public abstract int NumDataTypes { get; }
 
         public abstract IEnumerator<DataType> GetEnumerator();

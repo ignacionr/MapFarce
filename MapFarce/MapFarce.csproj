@@ -81,11 +81,11 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="EditProperties\UIEditablePropertyAttribute.cs" />
-    <Compile Include="UI\InputDataTypeEditPopup.cs">
+    <Compile Include="UI\DataTypeEditPopup.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\InputDataTypeEditPopup.Designer.cs">
-      <DependentUpon>InputDataTypeEditPopup.cs</DependentUpon>
+    <Compile Include="UI\DataTypeEditPopup.Designer.cs">
+      <DependentUpon>DataTypeEditPopup.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\MainForm.cs">
       <SubType>Form</SubType>
@@ -107,8 +107,8 @@
     <EmbeddedResource Include="UI\DataSourceEditPopup.resx">
       <DependentUpon>DataSourceEditPopup.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\InputDataTypeEditPopup.resx">
-      <DependentUpon>InputDataTypeEditPopup.cs</DependentUpon>
+    <EmbeddedResource Include="UI\DataTypeEditPopup.resx">
+      <DependentUpon>DataTypeEditPopup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

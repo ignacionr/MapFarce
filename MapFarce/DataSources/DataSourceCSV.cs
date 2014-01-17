@@ -52,6 +52,7 @@ namespace MapFarce.DataSources
         }
 
         public override bool CanAddDataTypes { get { return false; } }
+        public override bool CanEditTypeFields { get { return true; } }
 
         protected override IList<DataTypeCSV> RetrieveDataTypes()
         {
@@ -103,7 +104,7 @@ namespace MapFarce.DataSources
                 return reader;
             }
 
-            protected override IList<DataFieldCSV> RetrieveFields()
+            protected override List<DataFieldCSV> RetrieveFields()
             {
                 var reader = CreateReader();
                 var fields = new List<DataFieldCSV>();
@@ -112,16 +113,21 @@ namespace MapFarce.DataSources
                 {
                     string[] headers = reader.GetFieldHeaders();
                     for (int i = 0; i < headers.Length; i++)
-                        fields.Add(new DataFieldCSV(i, headers[i]));
+                        fields.Add(new DataFieldCSV(headers[i]));
                 }
                 else
                 {
                     for (int i = 0; i < reader.FieldCount; i++)
-                        fields.Add(new DataFieldCSV(i, "Col " + i));
+                        fields.Add(new DataFieldCSV("Col " + i));
                 }
 
                 reader.Dispose();
                 return fields;
+            }
+
+            public override DataField CreateField()
+            {
+                return new DataFieldCSV(string.Empty);
             }
 
             CsvReader reader;
@@ -158,19 +164,9 @@ namespace MapFarce.DataSources
 
         public class DataFieldCSV : DataField
         {
-            public DataFieldCSV(int colNum, string name)
+            public DataFieldCSV(string name)
                 : base(name, FieldType.String)
             {
-                ColumnNumber = colNum;
-            }
-
-            public int ColumnNumber { get; private set; }
-
-            public override int CompareTo(DataField other)
-            {
-                if ( other is DataFieldCSV )
-                    return ColumnNumber.CompareTo((other as DataFieldCSV).ColumnNumber);
-                return Name.CompareTo(other.Name);
             }
         }
 

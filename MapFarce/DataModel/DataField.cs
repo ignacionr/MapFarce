@@ -16,7 +16,12 @@ namespace MapFarce.DataModel
         public string Name { get; set; }
         public string DisplayName { get; set; }
         public FieldType Type { get; set; }
+        public int FieldNumber { get; set; }
 
-        public abstract int CompareTo(DataField other);
+        public int CompareTo(DataField other)
+        {
+            int diff = FieldNumber.CompareTo(other.FieldNumber);
+            return diff != 0 ? diff : Name.CompareTo(other.Name);
+        }
     }
 }

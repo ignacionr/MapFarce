@@ -15,6 +15,7 @@ namespace MapFarce.DataModel
 
         public abstract DataSource SourceBase { get; }
         public abstract string Name { get; }
+
         public bool IsEnabled { get; set; }
 
         public override string ToString() { return Name; }
@@ -25,6 +26,14 @@ namespace MapFarce.DataModel
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() { return GetEnumerator(); }
 
         public abstract IEnumerable<DataItem> ReadData();
+
+        public abstract DataField CreateField();
+
+        public abstract int FieldCount { get; }
+        public abstract void AddField(DataField field);
+        public abstract void RemoveField(DataField field);
+        public abstract DataField GetField(int pos);
+        public abstract void SortFields();
 
         public virtual void BeginRead()
         {
@@ -74,18 +83,49 @@ namespace MapFarce.DataModel
         public override DataSource SourceBase { get { return Source; } }
         public SourceType Source { get; protected set; }
 
-        protected abstract IList<Field> RetrieveFields();
-        private IList<Field> Fields;
+        protected abstract List<Field> RetrieveFields();
+        private List<Field> Fields;
         public IList<Field> GetFields()
         {
             if (Fields == null)
+            {
                 Fields = RetrieveFields();
+                for (int i = 0; i < Fields.Count; i++)
+                    Fields[i].FieldNumber = i + 1;
+            }
             return Fields;
         }
 
         public override IEnumerator<DataField> GetEnumerator()
         {
             return GetFields().GetEnumerator();
+        }
+
+        public override int FieldCount { get { return Fields.Count; } }
+
+        public override void AddField(DataField field)
+        {
+            Fields.Add(field as Field);
+            field.FieldNumber = Fields.Count;
+        }
+
+        public override void RemoveField(DataField field)
+        {
+            Fields.Remove(field as Field);
+
+            foreach (var other in Fields)
+                if (other.FieldNumber > field.FieldNumber)
+                    other.FieldNumber--;
+        }
+
+        public override DataField GetField(int pos)
+        {
+            return Fields[pos - 1];
+        }
+
+        public override void SortFields()
+        {
+            Fields.Sort();
         }
 
         public override void SourceChanged()

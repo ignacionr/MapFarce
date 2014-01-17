@@ -1,6 +1,6 @@
 ﻿namespace MapFarce.UI
 {
-    partial class InputDataTypeEditPopup
+    partial class DataTypeEditPopup
     {
         /// <summary>
         /// Required designer variable.
@@ -34,6 +34,8 @@
             this.colFieldType = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.lnkMoveUp = new System.Windows.Forms.LinkLabel();
+            this.lnkMoveDown = new System.Windows.Forms.LinkLabel();
             ((System.ComponentModel.ISupportInitialize)(this.fieldGrid)).BeginInit();
             this.SuspendLayout();
             // 
@@ -46,18 +48,19 @@
             this.colFieldName,
             this.ColDisplayName,
             this.colFieldType});
-            this.fieldGrid.Location = new System.Drawing.Point(4, 83);
+            this.fieldGrid.Location = new System.Drawing.Point(3, 4);
             this.fieldGrid.Name = "fieldGrid";
             this.fieldGrid.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            this.fieldGrid.Size = new System.Drawing.Size(425, 168);
+            this.fieldGrid.Size = new System.Drawing.Size(425, 290);
             this.fieldGrid.TabIndex = 3;
+            this.fieldGrid.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.fieldGrid_UserAddedRow);
+            this.fieldGrid.UserDeletedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.fieldGrid_UserDeletedRow);
             // 
             // colFieldName
             // 
             this.colFieldName.HeaderText = "Name";
             this.colFieldName.MaxInputLength = 200;
             this.colFieldName.Name = "colFieldName";
-            this.colFieldName.ReadOnly = true;
             this.colFieldName.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.colFieldName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
             this.colFieldName.Width = 140;
@@ -100,33 +103,60 @@
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             // 
-            // InputDataTypeEditPopup
+            // lnkMoveUp
+            // 
+            this.lnkMoveUp.AutoSize = true;
+            this.lnkMoveUp.Location = new System.Drawing.Point(12, 305);
+            this.lnkMoveUp.Name = "lnkMoveUp";
+            this.lnkMoveUp.Size = new System.Drawing.Size(49, 13);
+            this.lnkMoveUp.TabIndex = 6;
+            this.lnkMoveUp.TabStop = true;
+            this.lnkMoveUp.Text = "Move up";
+            this.lnkMoveUp.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkMoveUp_LinkClicked);
+            // 
+            // lnkMoveDown
+            // 
+            this.lnkMoveDown.AutoSize = true;
+            this.lnkMoveDown.Location = new System.Drawing.Point(67, 305);
+            this.lnkMoveDown.Name = "lnkMoveDown";
+            this.lnkMoveDown.Size = new System.Drawing.Size(63, 13);
+            this.lnkMoveDown.TabIndex = 6;
+            this.lnkMoveDown.TabStop = true;
+            this.lnkMoveDown.Text = "Move down";
+            this.lnkMoveDown.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkMoveDown_LinkClicked);
+            // 
+            // DataTypeEditPopup
             // 
             this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(432, 335);
+            this.Controls.Add(this.lnkMoveDown);
+            this.Controls.Add(this.lnkMoveUp);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.fieldGrid);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "InputDataTypeEditPopup";
+            this.Name = "DataTypeEditPopup";
             this.Text = "Edit Data Type";
             ((System.ComponentModel.ISupportInitialize)(this.fieldGrid)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
         private System.Windows.Forms.DataGridView fieldGrid;
+        private System.Windows.Forms.Button btnOK;
+        private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.LinkLabel lnkMoveUp;
+        private System.Windows.Forms.LinkLabel lnkMoveDown;
         private System.Windows.Forms.DataGridViewTextBoxColumn colFieldName;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColDisplayName;
         private System.Windows.Forms.DataGridViewComboBoxColumn colFieldType;
-        private System.Windows.Forms.Button btnOK;
-        private System.Windows.Forms.Button btnCancel;
     }
 }

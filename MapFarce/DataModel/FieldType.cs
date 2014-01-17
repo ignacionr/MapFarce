@@ -47,6 +47,14 @@ namespace MapFarce.DataModel
             }
         }
 
+        public static FieldType GetByName(string val)
+        {
+            foreach (var field in AllTypes)
+                if ( field.Name == val )
+                    return field;
+            throw new KeyNotFoundException(val + " is not a valid FieldType");
+        }
+
         private FieldType(Type type)
         {
             this.type = type;
