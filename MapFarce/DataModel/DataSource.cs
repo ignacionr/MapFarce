@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data;
+using MapFarce.UI;
 
 namespace MapFarce.DataModel
 {
     public abstract class DataSource : ProjectElement, IEnumerable<DataType>
     {
         public Mode DataMode { get; set; }
-
-        public abstract bool InitializeNew();
+        public DataSourceControl ProjectControl { get; set; }
 
         public abstract bool CanAddDataTypes { get; }
         public abstract bool CanEditTypeFields { get; }

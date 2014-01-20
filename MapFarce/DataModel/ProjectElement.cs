@@ -11,5 +11,7 @@ namespace MapFarce.DataModel
         public abstract string Name { get; }
         public Point Location { get; set; }
         public bool HasChanges { get; set; }
+
+        public abstract bool InitializeNew();
     }
 }

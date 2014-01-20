@@ -58,6 +58,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Label lblName;
+        public System.Windows.Forms.Label lblName;
+
     }
 }

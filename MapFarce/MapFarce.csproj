@@ -103,6 +103,12 @@
     <Compile Include="UI\MappingControl.Designer.cs">
       <DependentUpon>MappingControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\MappingEditPopup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\MappingEditPopup.Designer.cs">
+      <DependentUpon>MappingEditPopup.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\ProjectPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -124,6 +130,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\MappingControl.resx">
       <DependentUpon>MappingControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\MappingEditPopup.resx">
+      <DependentUpon>MappingEditPopup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\ProjectPanel.resx">
       <DependentUpon>ProjectPanel.cs</DependentUpon>

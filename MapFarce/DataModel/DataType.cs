@@ -18,7 +18,7 @@ namespace MapFarce.DataModel
 
         public bool IsEnabled { get; set; }
 
-        public override string ToString() { return Name; }
+        public override string ToString() { return string.Format("{0} - {1}", SourceBase.Name, Name); }
 
         public abstract void SourceChanged();
 

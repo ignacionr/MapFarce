@@ -102,6 +102,9 @@ namespace MapFarce.UI
         public void AddMapping()
         {
             Mapping mapping = new Mapping();
+            if (!mapping.InitializeNew()) // but these might not be NEW mappings. We might be loading a file!
+                return;
+
             Project.Instance.AddMapping(mapping);
             AddControlFor(mapping);
         }
