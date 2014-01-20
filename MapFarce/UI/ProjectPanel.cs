@@ -70,13 +70,7 @@ namespace MapFarce.UI
             location.Offset(e.Location.X - dragStartLocation.X, e.Location.Y - dragStartLocation.Y);
             draggingControl.Location = location;
 
-            var tag = draggingControl.Tag;
-            if (tag != null && tag is ProjectElement)
-            {
-                var element = tag as ProjectElement;
-                element.Location = location;
-                element.HasChanges = true;
-            }
+            Project.Instance.Changed();
         }
 
         public void AddSource(DataSource.Mode mode, DataSourceDescriptorAttribute attrib, Type type)
@@ -93,7 +87,7 @@ namespace MapFarce.UI
         private void AddControlFor(DataSource source)
         {
             var sourceControl = new DataSourceControl();
-            source.Location = sourceControl.Location = PlaceNewControl(sourceControl.Size);
+            sourceControl.Location = PlaceNewControl(sourceControl.Size);
             sourceControl.Tag = source;
             Controls.Add(sourceControl);
             sourceControl.Populate(source);
@@ -112,7 +106,7 @@ namespace MapFarce.UI
         private void AddControlFor(Mapping mapping)
         {
             MappingControl mappingControl = new MappingControl();
-            mapping.Location = mappingControl.Location = PlaceNewControl(mappingControl.Size);
+            mappingControl.Location = PlaceNewControl(mappingControl.Size);
             mappingControl.Tag = mapping;
             Controls.Add(mappingControl);
             mappingControl.Populate(mapping);
@@ -129,7 +123,7 @@ namespace MapFarce.UI
             foreach ( Control c in Controls )
                 if (c is DataSourceControl)
                 {
-                    source = (c as DataSourceControl).Source;
+                    source = (c as DataSourceControl).Element;
                     break;
                 }
 

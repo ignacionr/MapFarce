@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace MapFarce.DataModel
 {
-    public class Mapping : ProjectElement
+    public class Mapping : ProjectElement<Mapping, MappingControl>
     {
         private string name;
         public override string Name { get { return name; } }
@@ -17,8 +17,6 @@ namespace MapFarce.DataModel
             if (ProjectControl != null)
                 ProjectControl.lblName.Text = name;
         }
-
-        public MappingControl ProjectControl { get; set; }
 
         public List<DataType> Inputs = new List<DataType>();
         public List<DataType> Outputs = new List<DataType>();

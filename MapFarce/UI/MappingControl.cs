@@ -10,7 +10,7 @@ using MapFarce.DataModel;
 
 namespace MapFarce.UI
 {
-    public partial class MappingControl : UserControl
+    public partial class MappingControl : ProjectControl<Mapping, MappingControl>
     {
         public MappingControl()
         {
@@ -24,12 +24,10 @@ namespace MapFarce.UI
             }
         }
 
-        public Mapping Mapping { get; private set; }
-
-        public void Populate(Mapping mapping)
+        public override void Populate(Mapping element)
         {
-            Mapping = mapping;
-            lblName.Text = mapping.Name;
+            Element = element;
+            lblName.Text = element.Name;
         }
     }
 }

@@ -27,7 +27,7 @@ namespace MapFarce.UI
 
             var groups = new SortedList<string, GroupBox>();
 
-            foreach (var prop in source.Source.GetType().GetProperties())
+            foreach (var prop in source.Element.GetType().GetProperties())
             {
                 var attributes = prop.GetCustomAttributes(typeof(UIEditablePropertyAttribute), false);
                 if (attributes.Length == 0)
@@ -55,7 +55,7 @@ namespace MapFarce.UI
 
         private bool ShouldShowDataTypeTable()
         {
-            return source.Source.CanAddDataTypes || source.Source.NumDataTypes > 1;
+            return source.Element.CanAddDataTypes || source.Element.NumDataTypes > 1;
         }
 
         CheckedListBox lstDataTypes = null;
@@ -65,14 +65,14 @@ namespace MapFarce.UI
             group.Controls.Add(lstDataTypes);
             lstDataTypes.Location = new Point(120, 10);
             lstDataTypes.Size = new Size(185, 80);
-            
-            foreach (var type in source.Source)
+
+            foreach (var type in source.Element)
                 lstDataTypes.Items.Add(type, type.IsEnabled);
 
             if (lstDataTypes.Items.Count > 0)
                 lstDataTypes.SelectedIndex = 0;
 
-            if (source.Source.DataMode == DataSource.Mode.Output && source.Source.CanAddDataTypes)
+            if (source.Element.DataMode == DataSource.Mode.Output && source.Element.CanAddDataTypes)
             {
                 LinkLabel lnkAddType = new LinkLabel();
                 lnkAddType.Text = "Add Data Type";
@@ -113,7 +113,7 @@ namespace MapFarce.UI
             else
                 throw new NotImplementedException("Not configured to edit " + attrib.Property.PropertyType.Name + " properties!");
 
-            c.SetValue(attrib.Property.GetValue(source.Source, null));
+            c.SetValue(attrib.Property.GetValue(source.Element, null));
             c.SetToolTip(toolTip1, attrib.Tooltip);
 
             c.Tag = attrib;
@@ -130,7 +130,7 @@ namespace MapFarce.UI
                 foreach (EditPropertyBase control in group.Controls)
                 {
                     var attribute = control.Tag as UIEditablePropertyAttribute;
-                    attribute.Property.SetValue(source.Source, control.GetValue(), null);
+                    attribute.Property.SetValue(source.Element, control.GetValue(), null);
                 }
 
             if (lstDataTypes != null)

@@ -90,6 +90,9 @@
     <Compile Include="UI\DataTypeEditPopup.Designer.cs">
       <DependentUpon>DataTypeEditPopup.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\ProjectControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="UI\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

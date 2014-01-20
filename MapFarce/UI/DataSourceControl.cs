@@ -10,7 +10,7 @@ using MapFarce.DataModel;
 
 namespace MapFarce.UI
 {
-    public partial class DataSourceControl : UserControl
+    public partial class DataSourceControl : ProjectControl<DataSource, DataSourceControl>
     {
         public DataSourceControl()
         {
@@ -19,19 +19,17 @@ namespace MapFarce.UI
 
         ContextMenu dataTypeRightClick;
 
-        public DataSource Source { get; private set; }
-
-        public void Populate(DataSource source)
+        public override void Populate(DataSource element)
         {
-            Source = source;
-            lblName.Text = source.Name;
+            Element = element;
+            lblName.Text = element.Name;
 
             treeView.Nodes.Clear();
 
             dataTypeRightClick = new ContextMenu();
             dataTypeRightClick.MenuItems.Add(new MenuItem("&Edit data type", (o, e) => ShowDataTypeEdit()));
 
-            if (source.DataMode == DataSource.Mode.Input)
+            if (element.DataMode == DataSource.Mode.Input)
             {
                 dataTypeRightClick.MenuItems.Add(new MenuItem("&View data", (o, e) => MessageBox.Show("not implemented")));
             }
@@ -40,7 +38,7 @@ namespace MapFarce.UI
 
             }
 
-            foreach (var type in source)
+            foreach (var type in element)
             {
                 if (!type.IsEnabled)
                     continue;
@@ -84,19 +82,19 @@ namespace MapFarce.UI
             var type = node.Tag as DataType;
             var popup = new DataTypeEditPopup();
 
-            popup.Populate(Source, node, type);
+            popup.Populate(Element, node, type);
             popup.ShowDialog();
         }
 
         public void Repopulate()
         {
-            Source.PropertiesChanged();
-            Populate(Source);
+            Element.PropertiesChanged();
+            Populate(Element);
         }
 
         private void lnkEdit_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            if (Source == null)
+            if (Element == null)
                 return;
 
             var editor = new DataSourceEditPopup();

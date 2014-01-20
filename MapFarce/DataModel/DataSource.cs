@@ -7,11 +7,10 @@ using MapFarce.UI;
 
 namespace MapFarce.DataModel
 {
-    public abstract class DataSource : ProjectElement, IEnumerable<DataType>
+    public abstract class DataSource : ProjectElement<DataSource, DataSourceControl>, IEnumerable<DataType>
     {
         public Mode DataMode { get; set; }
-        public DataSourceControl ProjectControl { get; set; }
-
+        
         public abstract bool CanAddDataTypes { get; }
         public abstract bool CanEditTypeFields { get; }
 
