@@ -28,16 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveProjectasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.projectToolStrip = new System.Windows.Forms.ToolStrip();
             this.btnAddInput = new System.Windows.Forms.ToolStripDropDownButton();
             this.btnAddOutput = new System.Windows.Forms.ToolStripDropDownButton();
             this.btnTestRead = new System.Windows.Forms.ToolStripButton();
             this.projectPanel = new MapFarce.UI.ProjectPanel();
+            this.btnAddMapping = new System.Windows.Forms.ToolStripButton();
             this.menuStrip1.SuspendLayout();
             this.projectToolStrip.SuspendLayout();
             this.SuspendLayout();
@@ -57,7 +60,8 @@
             this.fileMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newProjectToolStripMenuItem,
             this.openProjectToolStripMenuItem,
-            this.saveProjectToolStripMenuItem});
+            this.saveProjectToolStripMenuItem,
+            this.saveProjectasToolStripMenuItem});
             this.fileMenuItem.Name = "fileMenuItem";
             this.fileMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileMenuItem.Text = "File";
@@ -66,29 +70,41 @@
             // 
             this.newProjectToolStripMenuItem.Name = "newProjectToolStripMenuItem";
             this.newProjectToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.newProjectToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
-            this.newProjectToolStripMenuItem.Text = "&New project";
+            this.newProjectToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
+            this.newProjectToolStripMenuItem.Text = "&New Project";
             this.newProjectToolStripMenuItem.Click += new System.EventHandler(this.newProjectToolStripMenuItem_Click);
             // 
             // openProjectToolStripMenuItem
             // 
             this.openProjectToolStripMenuItem.Name = "openProjectToolStripMenuItem";
             this.openProjectToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.openProjectToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
-            this.openProjectToolStripMenuItem.Text = "&Open project...";
+            this.openProjectToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
+            this.openProjectToolStripMenuItem.Text = "&Open Project...";
+            this.openProjectToolStripMenuItem.Click += new System.EventHandler(this.openProjectToolStripMenuItem_Click);
             // 
             // saveProjectToolStripMenuItem
             // 
             this.saveProjectToolStripMenuItem.Name = "saveProjectToolStripMenuItem";
             this.saveProjectToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.saveProjectToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
-            this.saveProjectToolStripMenuItem.Text = "&Save project";
+            this.saveProjectToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
+            this.saveProjectToolStripMenuItem.Text = "&Save Project";
+            this.saveProjectToolStripMenuItem.Click += new System.EventHandler(this.saveProjectToolStripMenuItem_Click);
+            // 
+            // saveProjectasToolStripMenuItem
+            // 
+            this.saveProjectasToolStripMenuItem.Name = "saveProjectasToolStripMenuItem";
+            this.saveProjectasToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.S)));
+            this.saveProjectasToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
+            this.saveProjectasToolStripMenuItem.Text = "Save Project &As...";
+            this.saveProjectasToolStripMenuItem.Click += new System.EventHandler(this.saveProjectasToolStripMenuItem_Click);
             // 
             // projectToolStrip
             // 
             this.projectToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnAddInput,
             this.btnAddOutput,
+            this.btnAddMapping,
             this.btnTestRead});
             this.projectToolStrip.Location = new System.Drawing.Point(0, 24);
             this.projectToolStrip.Name = "projectToolStrip";
@@ -126,11 +142,20 @@
             // 
             this.projectPanel.AutoScroll = true;
             this.projectPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.projectPanel.HasChanges = false;
             this.projectPanel.Location = new System.Drawing.Point(0, 24);
             this.projectPanel.Name = "projectPanel";
             this.projectPanel.Size = new System.Drawing.Size(589, 303);
             this.projectPanel.TabIndex = 5;
+            // 
+            // btnAddMapping
+            // 
+            this.btnAddMapping.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnAddMapping.Image = ((System.Drawing.Image)(resources.GetObject("btnAddMapping.Image")));
+            this.btnAddMapping.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnAddMapping.Name = "btnAddMapping";
+            this.btnAddMapping.Size = new System.Drawing.Size(84, 22);
+            this.btnAddMapping.Text = "Add &mapping";
+            this.btnAddMapping.Click += new System.EventHandler(this.btnAddMapping_Click);
             // 
             // MainForm
             // 
@@ -165,6 +190,8 @@
         private System.Windows.Forms.ToolStripDropDownButton btnAddInput;
         private System.Windows.Forms.ToolStripDropDownButton btnAddOutput;
         private System.Windows.Forms.ToolStripButton btnTestRead;
+        private System.Windows.Forms.ToolStripMenuItem saveProjectasToolStripMenuItem;
+        private System.Windows.Forms.ToolStripButton btnAddMapping;
     }
 }
 

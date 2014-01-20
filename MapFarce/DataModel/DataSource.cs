@@ -6,10 +6,10 @@ using System.Data;
 
 namespace MapFarce.DataModel
 {
-    public abstract class DataSource : IEnumerable<DataType>
+    public abstract class DataSource : ProjectElement, IEnumerable<DataType>
     {
-        public abstract string Name { get; }
         public Mode DataMode { get; set; }
+
         public abstract bool InitializeNew();
 
         public abstract bool CanAddDataTypes { get; }

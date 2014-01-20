@@ -50,6 +50,9 @@
     <Compile Include="DataModel\DataItem.cs" />
     <Compile Include="DataModel\DataSource.cs" />
     <Compile Include="DataModel\FieldType.cs" />
+    <Compile Include="DataModel\Mapping.cs" />
+    <Compile Include="DataModel\Project.cs" />
+    <Compile Include="DataModel\ProjectElement.cs" />
     <Compile Include="UI\DataSourceControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -94,6 +97,12 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
+    <Compile Include="UI\MappingControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\MappingControl.Designer.cs">
+      <DependentUpon>MappingControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\ProjectPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -112,6 +121,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\MappingControl.resx">
+      <DependentUpon>MappingControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\ProjectPanel.resx">
       <DependentUpon>ProjectPanel.cs</DependentUpon>

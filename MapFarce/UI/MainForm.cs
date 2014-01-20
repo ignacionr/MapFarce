@@ -17,39 +17,55 @@ namespace MapFarce.UI
         public MainForm()
         {
             InitializeComponent();
+            Project.Instance = new Project();
         }
 
         private void newProjectToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            TryCloseProject();
-        }
+            if (!CheckCloseExisting())
+                return;
 
-        private void TryCloseProject()
-        {
-            if (projectPanel.HasChanges)
-            {
-                var retVal = MessageBox.Show("Save project changes?", "Save", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
-                if (retVal == DialogResult.Cancel)
-                    return;
-
-                if (retVal == DialogResult.Yes && !SaveProject())
-                    return;
-            }
-
-            CloseProject();
-        }
-
-        private bool SaveProject()
-        {
-            return true;
-        }
-
-        private void CloseProject()
-        {
+            Project.Instance = new Project();
             projectPanel.Reset();
             projectPanel.Show();
         }
 
+        private void saveProjectToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Project.Instance.Save();
+        }
+
+        private void saveProjectasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Project.Instance.SaveAs();
+        }
+
+        private void openProjectToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!CheckCloseExisting())
+                return;
+
+            if (Project.Open())
+            {
+                projectPanel.Reset();
+                projectPanel.Show();
+            }
+        }
+
+        private bool CheckCloseExisting()
+        {
+            if (Project.Instance.HasChanges)
+            {
+                var retVal = MessageBox.Show("Save project changes?", "Save", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                if (retVal == DialogResult.Cancel)
+                    return false;
+
+                if (retVal == DialogResult.Yes && !Project.Instance.Save())
+                    return false;
+            }
+            return true;
+        }
+        
         private void MainForm_Load(object sender, EventArgs e)
         {
             var types = typeof(DataSources.DataSourceCSV).Assembly.GetTypes()
@@ -77,6 +93,11 @@ namespace MapFarce.UI
 
                 btnAddOutput.DropDownItems.Add(b);
             }
+        }
+
+        private void btnAddMapping_Click(object sender, EventArgs e)
+        {
+            projectPanel.AddMapping();
         }
 
         private void btnTestRead_Click(object sender, EventArgs e)
