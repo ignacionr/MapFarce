@@ -18,7 +18,7 @@ namespace MapFarce.UI
         public ProjectPanel()
         {
             InitializeComponent();
-            ControlAdded += (o, e) => { MakeDraggable(e.Control); };
+            ControlAdded += (o, e) => MakeDraggable(e.Control);
             Project.Panel = this;
         }
         
@@ -74,7 +74,7 @@ namespace MapFarce.UI
             Project.Instance.Changed();
         }
 
-        public void AddSource(DataSource.Mode mode, DataSourceDescriptorAttribute attrib, Type type)
+        public void AddSource(DataSource.Mode mode, Type type)
         {
             var source = Activator.CreateInstance(type) as DataSource;
             source.DataMode = mode;

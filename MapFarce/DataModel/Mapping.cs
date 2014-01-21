@@ -29,7 +29,7 @@ namespace MapFarce.DataModel
             return popup.ShowDialog() == DialogResult.OK;
         }
 
-        public override XmlNode SaveToXml(XmlNode parent)
+        public override void SaveToXml(XmlNode node)
         {
             throw new NotImplementedException();
         }

@@ -14,5 +14,21 @@ namespace MapFarce
         {
             Name = name;
         }
+
+        private static SortedList<Type, string> namesByType = new SortedList<Type, string>();
+        public static string GetName(Type type)
+        {
+            string name;
+            if (namesByType.TryGetValue(type, out name))
+                return name;
+
+            var attributes = type.GetCustomAttributes(typeof(DataSourceDescriptorAttribute), false);
+            if (attributes.Length == 0)
+                return null;
+
+            DataSourceDescriptorAttribute attrib = attributes[0] as DataSourceDescriptorAttribute;
+            namesByType.Add(type, attrib.Name);
+            return attrib.Name;
+        }
     }
 }

@@ -27,15 +27,8 @@ namespace MapFarce.UI
 
             var groups = new SortedList<string, GroupBox>();
 
-            foreach (var prop in source.Element.GetType().GetProperties())
+            foreach (var attrib in UIEditablePropertyAttribute.GetAll(source.Element.GetType()))
             {
-                var attributes = prop.GetCustomAttributes(typeof(UIEditablePropertyAttribute), false);
-                if (attributes.Length == 0)
-                    continue;
-
-                UIEditablePropertyAttribute attrib = attributes[0] as UIEditablePropertyAttribute;
-                attrib.Property = prop;
-
                 GroupBox group;
                 if (!groups.TryGetValue(attrib.Group, out group))
                 {
@@ -101,19 +94,7 @@ namespace MapFarce.UI
 
         private void AddEditControl(GroupBox group, UIEditablePropertyAttribute attrib)
         {
-            EditPropertyBase c;
-            if (attrib.Property.PropertyType == typeof(FileInfo))
-                c = new FileEditProperty(attrib.Label);
-            else if (attrib.Property.PropertyType == typeof(bool))
-                c = new BoolEditProperty(attrib.Label);
-            else if (attrib.Property.PropertyType == typeof(char))
-                c = new CharEditProperty(attrib.Label);
-            else if (attrib.Property.PropertyType == typeof(string))
-                c = new StringEditProperty(attrib.Label);
-            else
-                throw new NotImplementedException("Not configured to edit " + attrib.Property.PropertyType.Name + " properties!");
-
-            c.SetValue(attrib.Property.GetValue(source.Element, null));
+            EditPropertyBase c = attrib.GetControlToEdit(source.Element);
             c.SetToolTip(toolTip1, attrib.Tooltip);
 
             c.Tag = attrib;

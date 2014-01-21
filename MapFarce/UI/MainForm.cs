@@ -65,31 +65,21 @@ namespace MapFarce.UI
             }
             return true;
         }
-        
+
         private void MainForm_Load(object sender, EventArgs e)
         {
-            var types = typeof(DataSources.DataSourceCSV).Assembly.GetTypes()
-                .Where(t => t.IsSubclassOf(typeof(DataSource)))
-                .OrderBy(type => type.Name);
-
-            foreach (var type in types)
+            foreach (var kvp in DataSource.GetAllTypes())
             {
-                var attributes = type.GetCustomAttributes(typeof(DataSourceDescriptorAttribute), false);
-                if (attributes.Length == 0)
-                    continue;
-
-                DataSourceDescriptorAttribute attrib = attributes[0] as DataSourceDescriptorAttribute;
-
                 ToolStripButton b = new ToolStripButton();
-                b.Text = attrib.Name;
-                b.Click += (s, a) => projectPanel.AddSource(DataSource.Mode.Input, attrib, type);
+                b.Text = kvp.Key;
+                b.Click += (s, a) => projectPanel.AddSource(DataSource.Mode.Input, kvp.Value);
 
                 btnAddInput.DropDownItems.Add(b);
 
 
                 b = new ToolStripButton();
-                b.Text = attrib.Name;
-                b.Click += (s, a) => projectPanel.AddSource(DataSource.Mode.Output, attrib, type);
+                b.Text = kvp.Key;
+                b.Click += (s, a) => projectPanel.AddSource(DataSource.Mode.Output, kvp.Value);
 
                 btnAddOutput.DropDownItems.Add(b);
             }

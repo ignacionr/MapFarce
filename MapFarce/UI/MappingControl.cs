@@ -27,6 +27,7 @@ namespace MapFarce.UI
         public override void Populate(Mapping element)
         {
             Element = element;
+            element.ProjectControl = this;
             lblName.Text = element.Name;
         }
     }

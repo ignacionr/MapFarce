@@ -22,6 +22,7 @@ namespace MapFarce.UI
         public override void Populate(DataSource element)
         {
             Element = element;
+            element.ProjectControl = this;
             lblName.Text = element.Name;
 
             treeView.Nodes.Clear();

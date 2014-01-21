@@ -13,6 +13,7 @@ using System.Runtime.Serialization;
 using System.Windows.Forms;
 using MapFarce.DataModel;
 using MapFarce.EditProperties;
+using System.Xml;
 
 namespace MapFarce.DataSources
 {
@@ -49,11 +50,6 @@ namespace MapFarce.DataSources
 
             File = new FileInfo(dialog.FileName);
             return true;
-        }
-
-        public override System.Xml.XmlNode SaveToXml(System.Xml.XmlNode parent)
-        {
-            throw new NotImplementedException();
         }
 
         public override bool CanAddDataTypes { get { return false; } }

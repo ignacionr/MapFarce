@@ -19,6 +19,6 @@ namespace MapFarce.DataModel
 
         public abstract bool InitializeNew();
 
-        public abstract XmlNode SaveToXml(XmlNode parent);
+        public abstract void SaveToXml(XmlNode node);
     }
 }

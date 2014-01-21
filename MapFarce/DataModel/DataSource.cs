@@ -5,6 +5,7 @@ using System.Text;
 using System.Data;
 using MapFarce.UI;
 using System.Xml;
+using MapFarce.EditProperties;
 
 namespace MapFarce.DataModel
 {
@@ -17,9 +18,88 @@ namespace MapFarce.DataModel
 
         public abstract int NumDataTypes { get; }
 
+        private static SortedList<string, Type> sourceTypesByName;
+        public static SortedList<string, Type> GetAllTypes()
+        {
+            if ( sourceTypesByName == null )
+            {
+                var types = typeof(DataSources.DataSourceCSV).Assembly.GetTypes()
+                    .Where(t => t.IsSubclassOf(typeof(DataSource)))
+                    .OrderBy(t => t.Name);
+
+                sourceTypesByName = new SortedList<string,Type>();
+                foreach (var type in types)
+                {
+                    string descriptor = DataSourceDescriptorAttribute.GetName(type);
+                    if (descriptor != null)
+                        sourceTypesByName[descriptor] = type;
+                }
+            }
+        
+            return sourceTypesByName;
+        }
+
+        public static XmlNode CreateXmlNode(DataSource source, XmlNode sourceRoot)
+        {
+            var node = sourceRoot.OwnerDocument.CreateElement("Source");
+            var attrib = sourceRoot.OwnerDocument.CreateAttribute("type");
+            attrib.Value = DataSourceDescriptorAttribute.GetName(source.GetType()) ?? "unknown";
+            node.Attributes.Append(attrib);
+            sourceRoot.AppendChild(node);
+
+            return node;
+        }
+
+        public override void SaveToXml(XmlNode node)
+        {
+            foreach (var prop in UIEditablePropertyAttribute.GetAll(GetType()))
+            {
+                object val = prop.Property.GetValue(this, null);
+                if (val == null)
+                    continue;
+
+                var child = node.OwnerDocument.CreateElement(prop.Property.Name);
+                node.AppendChild(child);
+                child.InnerText = prop.GetStringFromValue(val);
+            }
+
+            var typesRoot = node.OwnerDocument.CreateElement("DataTypes");
+            foreach (var type in this)
+            {
+                ;
+            }
+        }
+        
         public static DataSource LoadFromXml(XmlNode node)
         {
-            throw new NotImplementedException();
+            var attrib = node.Attributes["type"];
+            var types = DataSource.GetAllTypes();
+
+            if (!types.ContainsKey(attrib.Value))
+                return null;
+
+            DataSource source = (DataSource)Activator.CreateInstance(types[attrib.Value]);
+            source.PopulateFromXml(node);
+            return source;
+        }
+
+        public virtual void PopulateFromXml(XmlNode node)
+        {
+            foreach (var prop in UIEditablePropertyAttribute.GetAll(GetType()))
+            {
+                var child = node[prop.Property.Name];
+                if (child == null)
+                    continue;
+
+                prop.SetValueFromString(this, child.InnerText);
+            }
+
+            var typesRoot = node["DataTypes"];
+            if ( typesRoot != null )
+                foreach (XmlNode typeNode in typesRoot.ChildNodes)
+                {
+                    ;
+                }
         }
 
         public abstract IEnumerator<DataType> GetEnumerator();
