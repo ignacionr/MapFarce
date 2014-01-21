@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Drawing;
 using MapFarce.UI;
+using System.Xml;
 
 namespace MapFarce.DataModel
 {
@@ -17,5 +18,7 @@ namespace MapFarce.DataModel
         public U ProjectControl { get; set; }
 
         public abstract bool InitializeNew();
+
+        public abstract XmlNode SaveToXml(XmlNode parent);
     }
 }

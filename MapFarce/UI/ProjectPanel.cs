@@ -19,6 +19,7 @@ namespace MapFarce.UI
         {
             InitializeComponent();
             ControlAdded += (o, e) => { MakeDraggable(e.Control); };
+            Project.Panel = this;
         }
         
         public void Reset()
@@ -84,7 +85,7 @@ namespace MapFarce.UI
             AddControlFor(source);
         }
 
-        private void AddControlFor(DataSource source)
+        public void AddControlFor(DataSource source)
         {
             var sourceControl = new DataSourceControl();
             sourceControl.Location = PlaceNewControl(sourceControl.Size);
@@ -103,7 +104,7 @@ namespace MapFarce.UI
             AddControlFor(mapping);
         }
 
-        private void AddControlFor(Mapping mapping)
+        public void AddControlFor(Mapping mapping)
         {
             MappingControl mappingControl = new MappingControl();
             mappingControl.Location = PlaceNewControl(mappingControl.Size);

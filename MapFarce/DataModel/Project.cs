@@ -5,12 +5,15 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Windows.Forms;
+using System.Xml;
+using MapFarce.UI;
 
 namespace MapFarce.DataModel
 {
     public class Project
     {
         public static Project Instance { get; set; }
+        public static ProjectPanel Panel { get; set; }
 
         List<DataSource> sources = new List<DataSource>();
         List<Mapping> mappings = new List<Mapping>();
@@ -103,21 +106,66 @@ namespace MapFarce.DataModel
             return true;
         }
 
+        private const string projectNodeName = "Project", sourcesNodeName = "Sources", mappingsNodeName = "Mappings";
         public void SaveTo(FileInfo fi)
         {
             filename = fi;
 
-            hasChanges = false;
+            XmlDocument doc = new XmlDocument();
+            XmlNode root = doc.CreateElement(projectNodeName);
+            doc.AppendChild(root);
+
+            XmlNode sourceRoot = doc.CreateElement(sourcesNodeName);
+            root.AppendChild(sourceRoot);
+
             foreach (var source in sources)
+            {
+                sourceRoot.AppendChild(source.SaveToXml(sourceRoot));
                 source.HasChanges = false;
+            }
+
+            XmlNode mappingRoot = doc.CreateElement(mappingsNodeName);
+            root.AppendChild(mappingRoot);
+
             foreach (var mapping in mappings)
+            {
+                mappingRoot.AppendChild(mapping.SaveToXml(mappingRoot));
                 mapping.HasChanges = false;
+            }
+
+            hasChanges = false;
         }
 
         public static Project LoadFrom(FileInfo fi)
         {
             Project p = new Project();
             p.filename = fi;
+
+            XmlDocument doc = new XmlDocument();
+            doc.Load(fi.FullName);
+
+            if (doc.DocumentElement.Name != projectNodeName || doc.DocumentElement.ChildNodes.Count < 2)
+                return null;
+
+            var sourceRoot = doc.DocumentElement.ChildNodes[0];
+            var mappingsRoot = doc.DocumentElement.ChildNodes[1];
+
+            if (sourceRoot.Name != sourcesNodeName || mappingsRoot.Name != mappingsNodeName)
+                return null;
+
+            foreach (XmlNode node in sourceRoot.ChildNodes)
+            {
+                DataSource source = DataSource.LoadFromXml(node);
+                p.sources.Add(source);
+                Panel.AddControlFor(source); // ought to load dimensions and whatnot from the xml
+            }
+
+            foreach (XmlNode node in mappingsRoot.ChildNodes)
+            {
+                Mapping mapping = Mapping.LoadFromXml(node);
+                p.mappings.Add(mapping);
+                Panel.AddControlFor(mapping); // ought to load dimensions and whatnot from the xml
+            }
 
             return p;
         }

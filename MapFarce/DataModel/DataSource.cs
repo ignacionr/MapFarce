@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Data;
 using MapFarce.UI;
+using System.Xml;
 
 namespace MapFarce.DataModel
 {
@@ -15,6 +16,11 @@ namespace MapFarce.DataModel
         public abstract bool CanEditTypeFields { get; }
 
         public abstract int NumDataTypes { get; }
+
+        public static DataSource LoadFromXml(XmlNode node)
+        {
+            throw new NotImplementedException();
+        }
 
         public abstract IEnumerator<DataType> GetEnumerator();
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() { return GetEnumerator(); }

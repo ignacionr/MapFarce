@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using MapFarce.UI;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace MapFarce.DataModel
 {
@@ -26,6 +27,16 @@ namespace MapFarce.DataModel
             var popup = new MappingEditPopup();
             popup.Populate(this);
             return popup.ShowDialog() == DialogResult.OK;
+        }
+
+        public override XmlNode SaveToXml(XmlNode parent)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Mapping LoadFromXml(XmlNode node)
+        {
+            throw new NotImplementedException();
         }
     }
 }
