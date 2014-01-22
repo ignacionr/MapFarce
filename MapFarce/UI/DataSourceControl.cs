@@ -10,7 +10,7 @@ using MapFarce.DataModel;
 
 namespace MapFarce.UI
 {
-    public partial class DataSourceControl : ProjectControl<DataSource, DataSourceControl>
+    public partial class DataSourceControl : UserControl
     {
         public DataSourceControl()
         {
@@ -19,7 +19,9 @@ namespace MapFarce.UI
 
         ContextMenu dataTypeRightClick;
 
-        public override void Populate(DataSource element)
+        public DataSource Element { get; private set; }
+
+        public void Populate(DataSource element)
         {
             Element = element;
             element.ProjectControl = this;

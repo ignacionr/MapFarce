@@ -19,12 +19,12 @@ namespace MapFarce.DataModel
                 ProjectControl.lblName.Text = name;
         }
 
-        public List<DataType> Inputs = new List<DataType>();
-        public List<DataType> Outputs = new List<DataType>();
+        public List<Connection> Inputs = new List<Connection>();
+        public List<Connection> Outputs = new List<Connection>();
 
         public override bool InitializeNew()
         {
-            var popup = new MappingEditPopup();
+            var popup = new MappingCreatePopup();
             popup.Populate(this);
             return popup.ShowDialog() == DialogResult.OK;
         }
@@ -37,6 +37,11 @@ namespace MapFarce.DataModel
         public static Mapping LoadFromXml(XmlNode node)
         {
             throw new NotImplementedException();
+        }
+
+        public class Connection
+        {
+            public List<DataType> DataTypes = new List<DataType>();
         }
     }
 }

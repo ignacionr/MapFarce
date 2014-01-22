@@ -10,12 +10,12 @@ using MapFarce.DataModel;
 
 namespace MapFarce.UI
 {
-    public partial class MappingControl : ProjectControl<Mapping, MappingControl>
+    public partial class MappingControl : UserControl
     {
         public MappingControl()
         {
             InitializeComponent();
-
+            
             foreach (Control control in Controls)
             {
                 control.MouseDown += (o,e) => OnMouseDown(e);
@@ -24,7 +24,9 @@ namespace MapFarce.UI
             }
         }
 
-        public override void Populate(Mapping element)
+        public Mapping Element { get; private set; }
+
+        public void Populate(Mapping element)
         {
             Element = element;
             element.ProjectControl = this;

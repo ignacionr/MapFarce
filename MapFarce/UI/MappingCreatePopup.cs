@@ -10,9 +10,9 @@ using MapFarce.DataModel;
 
 namespace MapFarce.UI
 {
-    public partial class MappingEditPopup : Form
+    public partial class MappingCreatePopup : Form
     {
-        public MappingEditPopup()
+        public MappingCreatePopup()
         {
             InitializeComponent();
         }
@@ -25,22 +25,26 @@ namespace MapFarce.UI
             foreach (DataSource source in Project.Instance.Sources)
                 foreach ( DataType type in source )
                     if (source.DataMode == DataSource.Mode.Input)
-                        chkListInput.Items.Add(type, mapping.Inputs.Contains(type));
+                        chkListInput.Items.Add(type, false/*mapping.Inputs.Contains(type)*/);
                     else if (source.DataMode == DataSource.Mode.Output)
-                        chkListOutput.Items.Add(type, mapping.Inputs.Contains(type));
+                        chkListOutput.Items.Add(type, false/*mapping.Inputs.Contains(type)*/);
 
             CheckOK();
         }
 
         private void btnOK_Click(object sender, EventArgs e)
         {
-            mapping.Inputs.Clear();
+            Mapping.Connection connection = new Mapping.Connection();
             foreach ( DataType type in chkListInput.CheckedItems )
-                mapping.Inputs.Add(type);
+                connection.DataTypes.Add(type);
 
-            mapping.Outputs.Clear();
+            mapping.Inputs.Add(connection);
+
+            connection = new Mapping.Connection();
             foreach (DataType type in chkListOutput.CheckedItems)
-                mapping.Outputs.Add(type);
+                connection.DataTypes.Add(type);
+
+            mapping.Outputs.Add(connection);
 
             mapping.SetName(txtName.Text);
 

@@ -1,6 +1,6 @@
 ﻿namespace MapFarce.UI
 {
-    partial class MappingEditPopup
+    partial class MappingCreatePopup
     {
         /// <summary>
         /// Required designer variable.
@@ -133,7 +133,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "MappingEditPopup";
-            this.Text = "Edit Mapping";
+            this.Text = "Create Mapping";
             this.ResumeLayout(false);
             this.PerformLayout();
 
