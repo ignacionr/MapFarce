@@ -37,6 +37,8 @@ namespace MapFarce.UI
             c.MouseDown += Draggable_MouseDown;
             c.MouseUp += Draggable_MouseUp;
             c.MouseMove += Draggable_MouseMove;
+
+            Invalidate();
         }
 
         Control draggingControl;
@@ -72,6 +74,7 @@ namespace MapFarce.UI
             draggingControl.Location = location;
 
             Project.Instance.Changed();
+            Invalidate();
         }
 
         public void AddSource(DataSource.Mode mode, Type type)
@@ -139,5 +142,16 @@ namespace MapFarce.UI
         }
 
         public ContextMenu inputDataTypeRightClick, outputDataTypeRightClick;
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+
+            foreach (var mapping in Project.Instance.Mappings)
+            {
+                mapping.ProjectControl.InputConnector.DrawLinks(e.Graphics);
+                mapping.ProjectControl.OutputConnector.DrawLinks(e.Graphics);
+            }
+        }
     }
 }

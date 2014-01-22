@@ -97,6 +97,9 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
+    <Compile Include="UI\MappingConnector.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="UI\MappingControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
