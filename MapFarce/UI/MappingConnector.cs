@@ -35,17 +35,8 @@ namespace MapFarce.UI
             Invalidate();
             Points.Clear();
 
-            int width, height;
-            if (Connections.Count <= 1)
-            {
-                width = height = 0;
-                //Visible = false;
-            }
-            else
-            {
-                width = height = 64;
-                //Visible = true;
-            }
+            int width = 48, height = 64;
+            Visible = Connections.Count > 1;
 
             var bounds = Mapping.Bounds;
             if (Mode == DataSource.Mode.Input)
@@ -93,9 +84,7 @@ namespace MapFarce.UI
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            base.OnPaint(e);
-
-            e.Graphics.FillRectangle(new SolidBrush(Color.Red), new Rectangle(0, 0, Width, Height));
+            e.Graphics.DrawRectangle(new Pen(Color.Red), new Rectangle(0, 0, Width - 1, Height - 1));
 
             var pointPen = new Pen(Color.Blue, 10);
             var linePen = new Pen(Color.Green);
@@ -111,18 +100,20 @@ namespace MapFarce.UI
         {
             var myBounds = Bounds;
 
-            var pos = Location;
+            Point pos;
             switch (Connections.Count)
             {
                 case 0:
                     break;
                 case 1:
+                    pos = Location;
                     pos.Offset(MappingConnection);
                     DrawLinks(g, Connections[0], pos);
                     break;
                 default:
                     for (int i = 0; i < Connections.Count; i++)
                     {
+                        pos = Location;
                         pos.Offset(Points[i]);
                         DrawLinks(g, Connections[i], pos);
                     }
