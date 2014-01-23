@@ -35,7 +35,11 @@ namespace MapFarce.UI
             Invalidate();
             Points.Clear();
 
-            int width = 48, height = 64;
+            int height = 64;
+            if (Connections.Count > 4)
+                height = (int)(height + height * (Connections.Count - 4) * 0.1f);
+
+            int width = (int)(height * 0.625f + 0.5f);
             Visible = Connections.Count > 1;
 
             var bounds = Mapping.Bounds;
@@ -67,7 +71,7 @@ namespace MapFarce.UI
             
             float startAngle = -maxAngle / 2f;
             float dir = Mode == DataSource.Mode.Input ? -1 : 1;
-            float dist = 32f;
+            float dist = height / 2f;
 
             for (int i = 0; i < Connections.Count; i++)
             {
