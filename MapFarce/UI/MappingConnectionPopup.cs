@@ -29,7 +29,7 @@ namespace MapFarce.UI
 
             foreach (DataSource source in Project.Instance.Sources)
                 foreach (DataType type in source)
-                    if (source.DataMode == DataSource.Mode.Input)
+                    if (source.DataMode == mode)
                         chkListDataTypes.Items.Add(type, c.DataTypes.Contains(type));
 
             CheckOK();
@@ -37,11 +37,8 @@ namespace MapFarce.UI
 
         private void btnOK_Click(object sender, EventArgs e)
         {
-            Mapping.Connection connection = new Mapping.Connection();
             foreach (DataType type in chkListDataTypes.CheckedItems)
                 connection.DataTypes.Add(type);
-
-            mapping.Inputs.Add(connection);
 
             this.DialogResult = DialogResult.OK;
             Close();
