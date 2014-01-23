@@ -97,6 +97,12 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
+    <Compile Include="UI\MappingConnectionPopup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\MappingConnectionPopup.Designer.cs">
+      <DependentUpon>MappingConnectionPopup.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\MappingConnector.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -130,6 +136,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\MappingConnectionPopup.resx">
+      <DependentUpon>MappingConnectionPopup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\MappingControl.resx">
       <DependentUpon>MappingControl.cs</DependentUpon>

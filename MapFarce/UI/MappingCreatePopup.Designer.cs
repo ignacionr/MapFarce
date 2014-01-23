@@ -74,18 +74,18 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 15);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(31, 13);
+            this.label1.Size = new System.Drawing.Size(36, 13);
             this.label1.TabIndex = 10;
-            this.label1.Text = "Input";
+            this.label1.Text = "Inputs";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(12, 130);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(39, 13);
+            this.label2.Size = new System.Drawing.Size(44, 13);
             this.label2.TabIndex = 10;
-            this.label2.Text = "Output";
+            this.label2.Text = "Outputs";
             // 
             // label3
             // 
@@ -114,7 +114,7 @@
             this.chkListOutput.TabIndex = 11;
             this.chkListOutput.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.chkListOutput_ItemCheck);
             // 
-            // MappingEditPopup
+            // MappingCreatePopup
             // 
             this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -132,7 +132,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "MappingEditPopup";
+            this.Name = "MappingCreatePopup";
             this.Text = "Create Mapping";
             this.ResumeLayout(false);
             this.PerformLayout();

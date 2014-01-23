@@ -51,17 +51,31 @@ namespace MapFarce.UI
 
         private void lnkAddInput_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            // for now, just duplicate existing connection
-            Element.Inputs.Add(Element.Inputs[0]);
+            var popup = new MappingConnectionPopup();
+
+            var connection = new Mapping.Connection();
+            popup.Populate(Element, connection, DataSource.Mode.Input);
+
+            if (popup.ShowDialog() != DialogResult.OK)
+                return;
+
+            Element.Inputs.Add(connection);
             InputConnector.Recalculate();
-            
-            Parent.Refresh();
+
+            Parent.Invalidate();
         }
 
         private void lnkAddOutput_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            // for now, just duplicate existing connection
-            Element.Outputs.Add(Element.Outputs[0]);
+            var popup = new MappingConnectionPopup();
+
+            var connection = new Mapping.Connection();
+            popup.Populate(Element, connection, DataSource.Mode.Output);
+
+            if (popup.ShowDialog() != DialogResult.OK)
+                return;
+
+            Element.Outputs.Add(connection);
             OutputConnector.Recalculate();
 
             Parent.Invalidate();

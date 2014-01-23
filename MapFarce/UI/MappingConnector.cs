@@ -45,8 +45,8 @@ namespace MapFarce.UI
             var bounds = Mapping.Bounds;
             if (Mode == DataSource.Mode.Input)
             {
-                MappingConnection = new Point(bounds.X, bounds.Y + bounds.Height / 2);
-                Bounds = new Rectangle(MappingConnection.X - width, MappingConnection.Y - height / 2, width, height);
+                MappingConnection = new Point(bounds.X - 1, bounds.Y + bounds.Height / 2);
+                Bounds = new Rectangle(MappingConnection.X - width + 1, MappingConnection.Y - height / 2, width, height);
             }
             else if (Mode == DataSource.Mode.Output)
             {
@@ -77,18 +77,18 @@ namespace MapFarce.UI
             {
                 float angleIncrement = maxAngle * i / (float)(Connections.Count - 1);
 
-                Point p = new Point(
+                Points.Add(new Point(
                     MappingConnection.X + (int)(Math.Cos(startAngle + angleIncrement) * dist * dir + 0.5f),
                     MappingConnection.Y + (int)(Math.Sin(startAngle + angleIncrement) * dist + 0.5f)
-                );
-
-                Points.Add(p);
+                ));
             }
         }
 
         protected override void OnPaint(PaintEventArgs e)
         {
             e.Graphics.DrawRectangle(new Pen(Color.Red), new Rectangle(0, 0, Width - 1, Height - 1));
+            
+            DrawLinks(e.Graphics, false);
 
             var pointPen = new Pen(Color.Blue, 10);
             var linePen = new Pen(Color.Green);
@@ -100,39 +100,30 @@ namespace MapFarce.UI
             }
         }
 
-        public void DrawLinks(Graphics g)
+        public void DrawLinks(Graphics g, bool global = true)
         {
-            var myBounds = Bounds;
-
-            Point pos;
-            switch (Connections.Count)
-            {
-                case 0:
-                    break;
-                case 1:
-                    pos = Location;
-                    pos.Offset(MappingConnection);
-                    DrawLinks(g, Connections[0], pos);
-                    break;
-                default:
-                    for (int i = 0; i < Connections.Count; i++)
-                    {
-                        pos = Location;
-                        pos.Offset(Points[i]);
-                        DrawLinks(g, Connections[i], pos);
-                    }
-                    break;
-            }
+            if (Connections.Count == 1)
+                DrawLinks(g, Connections[0], MappingConnection, global);
+            else if (Connections.Count > 1)
+                for (int i = 0; i < Connections.Count; i++)
+                    DrawLinks(g, Connections[i], Points[i], global);
         }
 
         static readonly Pen linePen = new Pen(Color.Green);
-        private void DrawLinks(Graphics g, Mapping.Connection connection, Point mappingPoint)
+        private void DrawLinks(Graphics g, Mapping.Connection connection, Point mappingPoint, bool global)
         {
+            if (global)
+                mappingPoint.Offset(Location);
+
             foreach (var dt in connection.DataTypes)
                 if (dt.SourceBase.ProjectControl != null)
                 {
                     var bounds = dt.SourceBase.ProjectControl.Bounds;
-                    g.DrawLine(linePen, new Point(Mode == DataSource.Mode.Input ? bounds.X + Bounds.Width : bounds.X, bounds.Y + bounds.Height / 2), mappingPoint);
+
+                    if (!global)
+                        bounds.Offset(-Location.X, -Location.Y);
+
+                    g.DrawLine(linePen, new Point(Mode == DataSource.Mode.Input ? bounds.X + bounds.Width : bounds.X - 1, bounds.Y + bounds.Height / 2), mappingPoint);
                 }
         }
     }
