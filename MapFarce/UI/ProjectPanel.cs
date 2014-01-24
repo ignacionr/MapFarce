@@ -147,11 +147,12 @@ namespace MapFarce.UI
         {
             base.OnPaint(e);
 
-            foreach (var mapping in Project.Instance.Mappings)
-            {
-                mapping.ProjectControl.InputConnector.DrawLinks(e.Graphics);
-                mapping.ProjectControl.OutputConnector.DrawLinks(e.Graphics);
-            }
+            if ( Project.Instance != null )
+                foreach (var mapping in Project.Instance.Mappings)
+                {
+                    mapping.ProjectControl.InputConnector.DrawLinks(e.Graphics);
+                    mapping.ProjectControl.OutputConnector.DrawLinks(e.Graphics);
+                }
         }
     }
 }

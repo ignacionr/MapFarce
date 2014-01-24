@@ -120,8 +120,16 @@ namespace MapFarce.DataModel
 
             foreach (var source in sources)
             {
-                var node = DataSource.CreateXmlNode(source, sourceRoot);
-                source.SaveToXml(node);
+                var sourceNode = source.CreateXmlNode(sourceRoot);
+                
+                var typesRoot = doc.CreateElement("DataTypes");
+                sourceNode.AppendChild(typesRoot);
+
+                foreach (var type in source)
+                {
+                    var typeNode = type.CreateXmlNode(typesRoot);
+                }
+
                 source.HasChanges = false;
             }
 
@@ -130,10 +138,7 @@ namespace MapFarce.DataModel
 
             foreach (var mapping in mappings)
             {
-                var node = sourceRoot.OwnerDocument.CreateElement("Source");
-                mappingRoot.AppendChild(node);
-
-                mapping.SaveToXml(node);
+                var node = mapping.CreateXmlNode(mappingRoot);
                 mapping.HasChanges = false;
             }
 

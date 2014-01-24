@@ -39,18 +39,31 @@ namespace MapFarce.DataModel
             return sourceTypesByName;
         }
 
-        public static XmlNode CreateXmlNode(DataSource source, XmlNode sourceRoot)
+        public override XmlNode CreateXmlNode(XmlNode parent)
         {
-            var node = sourceRoot.OwnerDocument.CreateElement("Source");
-            var attrib = sourceRoot.OwnerDocument.CreateAttribute("type");
-            attrib.Value = DataSourceDescriptorAttribute.GetName(source.GetType()) ?? "unknown";
-            node.Attributes.Append(attrib);
-            sourceRoot.AppendChild(node);
+            var node = parent.OwnerDocument.CreateElement("Source");
 
+            var attrib = node.OwnerDocument.CreateAttribute("mode");
+            attrib.Value = DataMode.ToString();
+            node.Attributes.Append(attrib);
+            
+            attrib = node.OwnerDocument.CreateAttribute("type");
+            attrib.Value = DataSourceDescriptorAttribute.GetName(GetType()) ?? "unknown";
+            node.Attributes.Append(attrib);
+
+            attrib = node.OwnerDocument.CreateAttribute("name");
+            attrib.Value = Name;
+            node.Attributes.Append(attrib);
+
+            parent.AppendChild(node);
+
+            SaveBounds(node);
+
+            SaveToXml(node);
             return node;
         }
 
-        public override void SaveToXml(XmlNode node)
+        protected override void SaveToXml(XmlNode node)
         {
             foreach (var prop in UIEditablePropertyAttribute.GetAll(GetType()))
             {
@@ -61,12 +74,6 @@ namespace MapFarce.DataModel
                 var child = node.OwnerDocument.CreateElement(prop.Property.Name);
                 node.AppendChild(child);
                 child.InnerText = prop.GetStringFromValue(val);
-            }
-
-            var typesRoot = node.OwnerDocument.CreateElement("DataTypes");
-            foreach (var type in this)
-            {
-                ;
             }
         }
         
@@ -83,7 +90,7 @@ namespace MapFarce.DataModel
             return source;
         }
 
-        public virtual void PopulateFromXml(XmlNode node)
+        public override void PopulateFromXml(XmlNode node)
         {
             foreach (var prop in UIEditablePropertyAttribute.GetAll(GetType()))
             {

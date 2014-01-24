@@ -38,9 +38,9 @@
             this.projectToolStrip = new System.Windows.Forms.ToolStrip();
             this.btnAddInput = new System.Windows.Forms.ToolStripDropDownButton();
             this.btnAddOutput = new System.Windows.Forms.ToolStripDropDownButton();
+            this.btnAddMapping = new System.Windows.Forms.ToolStripButton();
             this.btnTestRead = new System.Windows.Forms.ToolStripButton();
             this.projectPanel = new MapFarce.UI.ProjectPanel();
-            this.btnAddMapping = new System.Windows.Forms.ToolStripButton();
             this.menuStrip1.SuspendLayout();
             this.projectToolStrip.SuspendLayout();
             this.SuspendLayout();
@@ -51,7 +51,7 @@
             this.fileMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(589, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(670, 24);
             this.menuStrip1.TabIndex = 4;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -108,7 +108,7 @@
             this.btnTestRead});
             this.projectToolStrip.Location = new System.Drawing.Point(0, 24);
             this.projectToolStrip.Name = "projectToolStrip";
-            this.projectToolStrip.Size = new System.Drawing.Size(589, 25);
+            this.projectToolStrip.Size = new System.Drawing.Size(670, 25);
             this.projectToolStrip.TabIndex = 6;
             this.projectToolStrip.Text = "toolStrip1";
             // 
@@ -128,6 +128,16 @@
             this.btnAddOutput.Size = new System.Drawing.Size(81, 22);
             this.btnAddOutput.Text = "Add &output";
             // 
+            // btnAddMapping
+            // 
+            this.btnAddMapping.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnAddMapping.Image = ((System.Drawing.Image)(resources.GetObject("btnAddMapping.Image")));
+            this.btnAddMapping.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnAddMapping.Name = "btnAddMapping";
+            this.btnAddMapping.Size = new System.Drawing.Size(84, 22);
+            this.btnAddMapping.Text = "Add &mapping";
+            this.btnAddMapping.Click += new System.EventHandler(this.btnAddMapping_Click);
+            // 
             // btnTestRead
             // 
             this.btnTestRead.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
@@ -144,24 +154,14 @@
             this.projectPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.projectPanel.Location = new System.Drawing.Point(0, 24);
             this.projectPanel.Name = "projectPanel";
-            this.projectPanel.Size = new System.Drawing.Size(589, 303);
+            this.projectPanel.Size = new System.Drawing.Size(670, 303);
             this.projectPanel.TabIndex = 5;
-            // 
-            // btnAddMapping
-            // 
-            this.btnAddMapping.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.btnAddMapping.Image = ((System.Drawing.Image)(resources.GetObject("btnAddMapping.Image")));
-            this.btnAddMapping.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnAddMapping.Name = "btnAddMapping";
-            this.btnAddMapping.Size = new System.Drawing.Size(84, 22);
-            this.btnAddMapping.Text = "Add &mapping";
-            this.btnAddMapping.Click += new System.EventHandler(this.btnAddMapping_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(589, 327);
+            this.ClientSize = new System.Drawing.Size(670, 327);
             this.Controls.Add(this.projectToolStrip);
             this.Controls.Add(this.projectPanel);
             this.Controls.Add(this.menuStrip1);

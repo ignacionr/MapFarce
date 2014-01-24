@@ -59,7 +59,7 @@ namespace MapFarce.EditProperties
             else if (Property.PropertyType == typeof(string))
                 c = new StringEditProperty(Label);
             else
-                throw new NotImplementedException("Not configured to edit " + Property.PropertyType.Name + " properties!");
+                throw new Exception("Not configured to edit " + Property.PropertyType.Name + " properties!");
 
             c.SetValue(Property.GetValue(o, null));
             return c;
@@ -85,7 +85,7 @@ namespace MapFarce.EditProperties
             else if (Property.PropertyType == typeof(string))
                 val = strVal;
             else
-                throw new NotImplementedException("Not configured to edit " + Property.PropertyType.Name + " properties!");
+                throw new Exception("Not configured to edit " + Property.PropertyType.Name + " properties!");
 
             Property.SetValue(o, val, null);
         }

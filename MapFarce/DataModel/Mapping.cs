@@ -29,12 +29,54 @@ namespace MapFarce.DataModel
             return popup.ShowDialog() == DialogResult.OK;
         }
 
-        public override void SaveToXml(XmlNode node)
+        public override XmlNode CreateXmlNode(XmlNode parent)
+        {
+            var node = parent.OwnerDocument.CreateElement("Mapping");
+            parent.AppendChild(node);
+
+            SaveBounds(node);
+
+            SaveToXml(node);
+            return node;
+        }
+
+        protected override void SaveToXml(XmlNode node)
+        {
+            SaveConnections(node, "Inputs", Inputs);
+            SaveConnections(node, "Outputs", Outputs);
+
+            // also save the contents of this mapping
+        }
+
+        private void SaveConnections(XmlNode node, string name, List<Connection> connections)
+        {
+            var root = node.OwnerDocument.CreateElement(name);
+            node.AppendChild(root);
+
+            foreach (var connection in connections)
+            {
+                var conNode = node.OwnerDocument.CreateElement("Connection");
+                root.AppendChild(conNode);
+
+                foreach (var dt in connection.DataTypes)
+                {
+                    var attrib = node.OwnerDocument.CreateAttribute("source");
+                    attrib.InnerText = dt.SourceBase.Name;
+                    conNode.Attributes.Append(attrib);
+
+                    attrib = node.OwnerDocument.CreateAttribute("type");
+                    attrib.InnerText = dt.Name;
+                    conNode.Attributes.Append(attrib);
+                }
+            }
+        }
+
+        public static Mapping LoadFromXml(XmlNode node)
         {
             throw new NotImplementedException();
         }
 
-        public static Mapping LoadFromXml(XmlNode node)
+        public override void PopulateFromXml(XmlNode node)
         {
             throw new NotImplementedException();
         }

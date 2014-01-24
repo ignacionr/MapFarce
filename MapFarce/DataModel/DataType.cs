@@ -3,14 +3,47 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data;
+using System.Xml;
 
 namespace MapFarce.DataModel
 {
-    public abstract class DataType : IEnumerable<DataField>
+    public abstract class DataType : Savable, IEnumerable<DataField>
     {
         protected DataType()
         {
             IsEnabled = true;
+        }
+
+        public override XmlNode CreateXmlNode(XmlNode parent)
+        {
+            var node = parent.OwnerDocument.CreateElement("Type");
+            parent.AppendChild(node);
+
+            SaveToXml(node);
+            return node;
+        }
+
+        protected override void SaveToXml(XmlNode node)
+        {
+            var attrib = node.OwnerDocument.CreateAttribute("name");
+            attrib.Value = Name;
+            node.Attributes.Append(attrib);
+
+            foreach (var field in this)
+            {
+                var fieldNode = field.CreateXmlNode(node);
+                node.AppendChild(fieldNode);
+            }
+        }
+
+        public static DataType LoadFromXml(XmlNode node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void PopulateFromXml(XmlNode node)
+        {
+            throw new NotImplementedException();
         }
 
         public abstract DataSource SourceBase { get; }
