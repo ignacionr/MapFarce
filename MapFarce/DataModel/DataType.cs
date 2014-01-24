@@ -14,10 +14,15 @@ namespace MapFarce.DataModel
             IsEnabled = true;
         }
 
+        const string typeNodeName = "Type", nameAttribName = "name";
         public override XmlNode CreateXmlNode(XmlNode parent)
         {
-            var node = parent.OwnerDocument.CreateElement("Type");
+            var node = parent.OwnerDocument.CreateElement(typeNodeName);
             parent.AppendChild(node);
+
+            var attrib = node.OwnerDocument.CreateAttribute(nameAttribName);
+            attrib.Value = Name;
+            node.Attributes.Append(attrib);
 
             SaveToXml(node);
             return node;
@@ -25,10 +30,6 @@ namespace MapFarce.DataModel
 
         protected override void SaveToXml(XmlNode node)
         {
-            var attrib = node.OwnerDocument.CreateAttribute("name");
-            attrib.Value = Name;
-            node.Attributes.Append(attrib);
-
             foreach (var field in this)
             {
                 var fieldNode = field.CreateXmlNode(node);
@@ -38,7 +39,18 @@ namespace MapFarce.DataModel
 
         public static DataType LoadFromXml(XmlNode node, DataSource source)
         {
-            throw new NotImplementedException();
+            var type = source.GetDataTypeType();
+
+            DataType dt = (DataType)Activator.CreateInstance(type);
+
+            var attrib = node.Attributes[nameAttribName];
+            if (attrib == null || attrib.Value.Trim() == string.Empty)
+                throw new FormatException();
+
+            dt.Name = attrib.Value;
+
+            dt.PopulateFromXml(node);
+            return dt;
         }
 
         public override void PopulateFromXml(XmlNode node)

@@ -39,6 +39,8 @@ namespace MapFarce.DataModel
             return sourceTypesByName;
         }
 
+        public abstract Type GetDataTypeType();
+
         const string nodeName = "Source", modeAttribName = "mode", typeAttribName = "type", nameAttribName = "name";
 
         public override XmlNode CreateXmlNode(XmlNode parent)
@@ -188,6 +190,8 @@ namespace MapFarce.DataModel
                 return DataTypes.Count;
             }
         }
+
+        public override Type GetDataTypeType() { return typeof(Data); }
 
         public override IEnumerator<DataType> GetEnumerator()
         {
