@@ -88,15 +88,6 @@ namespace MapFarce.UI
             AddControlFor(source);
         }
 
-        public void AddControlFor(DataSource source)
-        {
-            var sourceControl = new DataSourceControl();
-            sourceControl.Location = PlaceNewControl(sourceControl.Size);
-            sourceControl.Tag = source;
-            Controls.Add(sourceControl);
-            sourceControl.Populate(source);
-        }
-
         public void AddMapping()
         {
             Mapping mapping = new Mapping();
@@ -105,6 +96,15 @@ namespace MapFarce.UI
 
             Project.Instance.AddMapping(mapping);
             AddControlFor(mapping);
+        }
+
+        public void AddControlFor(DataSource source)
+        {
+            var sourceControl = new DataSourceControl();
+            sourceControl.Location = PlaceNewControl(sourceControl.Size);
+            sourceControl.Tag = source;
+            Controls.Add(sourceControl);
+            sourceControl.Populate(source);
         }
 
         public void AddControlFor(Mapping mapping)

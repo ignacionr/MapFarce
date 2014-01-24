@@ -10,15 +10,6 @@ namespace MapFarce.DataModel
 {
     public class Mapping : ProjectElement<Mapping, MappingControl>
     {
-        private string name;
-        public override string Name { get { return name; } }
-        public void SetName(string n)
-        {
-            name = n;
-            if (ProjectControl != null)
-                ProjectControl.lblName.Text = name;
-        }
-
         public List<Connection> Inputs = new List<Connection>();
         public List<Connection> Outputs = new List<Connection>();
 

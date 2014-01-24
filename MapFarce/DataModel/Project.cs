@@ -168,6 +168,13 @@ namespace MapFarce.DataModel
                 DataSource source = DataSource.LoadFromXml(node);
                 p.sources.Add(source);
                 Panel.AddControlFor(source); // ought to load dimensions and whatnot from the xml
+
+                var typesRoot = node["DataTypes"];
+                if (typesRoot != null)
+                    foreach (XmlNode typeNode in typesRoot.ChildNodes)
+                    {
+                        DataType dt = DataType.LoadFromXml(typeNode, source);
+                    }
             }
 
             foreach (XmlNode node in mappingsRoot.ChildNodes)

@@ -36,7 +36,7 @@ namespace MapFarce.DataModel
             }
         }
 
-        public static DataType LoadFromXml(XmlNode node)
+        public static DataType LoadFromXml(XmlNode node, DataSource source)
         {
             throw new NotImplementedException();
         }

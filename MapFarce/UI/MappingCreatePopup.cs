@@ -46,7 +46,7 @@ namespace MapFarce.UI
 
             mapping.Outputs.Add(connection);
 
-            mapping.SetName(txtName.Text);
+            mapping.Name = txtName.Text;
 
             this.DialogResult = DialogResult.OK;
             Close();

@@ -10,11 +10,16 @@ using MapFarce.DataModel;
 
 namespace MapFarce.UI
 {
-    public partial class DataSourceControl : UserControl
+    public partial class DataSourceControl : UserControl, IProjectControl
     {
         public DataSourceControl()
         {
             InitializeComponent();
+        }
+
+        public void SetName(string name)
+        {
+            lblName.Text = name;
         }
 
         ContextMenu dataTypeRightClick;

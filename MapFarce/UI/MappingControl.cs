@@ -10,7 +10,7 @@ using MapFarce.DataModel;
 
 namespace MapFarce.UI
 {
-    public partial class MappingControl : UserControl
+    public partial class MappingControl : UserControl, IProjectControl
     {
         public MappingControl()
         {
@@ -19,6 +19,11 @@ namespace MapFarce.UI
             lblName.MouseDown += (o,e) => OnMouseDown(e);
             lblName.MouseUp += (o, e) => OnMouseUp(e);
             lblName.MouseMove += (o, e) => OnMouseMove(e);
+        }
+
+        public void SetName(string name)
+        {
+            lblName.Text = name;
         }
 
         public MappingConnector InputConnector { get; private set; }

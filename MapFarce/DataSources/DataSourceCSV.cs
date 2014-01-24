@@ -20,8 +20,6 @@ namespace MapFarce.DataSources
     [DataSourceDescriptor("CSV")]
     public class DataSourceCSV : DataSource<DataSourceCSV, DataSourceCSV.DataTypeCSV, DataSourceCSV.DataFieldCSV>
     {
-        public override string Name { get { return File == null ? "CSV data" : File.Name; } }
-
         public DataSourceCSV()
         {
             File = null;
@@ -61,7 +59,16 @@ namespace MapFarce.DataSources
         }
 
         [UIEditablePropertyAttribute(null, "The file to read from", "File")]
-        public FileInfo File { get; set; }
+        public FileInfo File
+        {
+            get { return file; }
+            set
+            {
+                file = value;
+                Name = file.Name;
+            }
+        }
+        private FileInfo file;
 
         [UIEditablePropertyAttribute("Has headers", "Whether or not the first row of the data contains column names", "Format")]
         public bool HasHeaders { get; set; }

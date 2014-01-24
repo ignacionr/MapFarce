@@ -39,19 +39,21 @@ namespace MapFarce.DataModel
             return sourceTypesByName;
         }
 
+        const string nodeName = "Source", modeAttribName = "mode", typeAttribName = "type", nameAttribName = "name";
+
         public override XmlNode CreateXmlNode(XmlNode parent)
         {
-            var node = parent.OwnerDocument.CreateElement("Source");
+            var node = parent.OwnerDocument.CreateElement(nodeName);
 
-            var attrib = node.OwnerDocument.CreateAttribute("mode");
+            var attrib = node.OwnerDocument.CreateAttribute(modeAttribName);
             attrib.Value = DataMode.ToString();
             node.Attributes.Append(attrib);
-            
-            attrib = node.OwnerDocument.CreateAttribute("type");
+
+            attrib = node.OwnerDocument.CreateAttribute(typeAttribName);
             attrib.Value = DataSourceDescriptorAttribute.GetName(GetType()) ?? "unknown";
             node.Attributes.Append(attrib);
 
-            attrib = node.OwnerDocument.CreateAttribute("name");
+            attrib = node.OwnerDocument.CreateAttribute(nameAttribName);
             attrib.Value = Name;
             node.Attributes.Append(attrib);
 
@@ -79,13 +81,29 @@ namespace MapFarce.DataModel
         
         public static DataSource LoadFromXml(XmlNode node)
         {
-            var attrib = node.Attributes["type"];
+            var attrib = node.Attributes[typeAttribName];
             var types = DataSource.GetAllTypes();
 
-            if (!types.ContainsKey(attrib.Value))
-                return null;
+            if (attrib == null || !types.ContainsKey(attrib.Value))
+                throw new FormatException();
 
             DataSource source = (DataSource)Activator.CreateInstance(types[attrib.Value]);
+
+            attrib = node.Attributes[nameAttribName];
+            if ( attrib == null || attrib.Value.Trim() == string.Empty )
+                throw new FormatException();
+
+            source.Name = attrib.Value;
+
+            attrib = node.Attributes[modeAttribName];
+            if ( attrib == null )
+                throw new FormatException();
+            
+            if ( attrib.Value == Mode.Input.ToString() )
+                source.DataMode = Mode.Input;
+            else if (attrib.Value == Mode.Output.ToString())
+                source.DataMode = Mode.Output;
+
             source.PopulateFromXml(node);
             return source;
         }
@@ -100,13 +118,6 @@ namespace MapFarce.DataModel
 
                 prop.SetValueFromString(this, child.InnerText);
             }
-
-            var typesRoot = node["DataTypes"];
-            if ( typesRoot != null )
-                foreach (XmlNode typeNode in typesRoot.ChildNodes)
-                {
-                    ;
-                }
         }
 
         public abstract IEnumerator<DataType> GetEnumerator();

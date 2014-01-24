@@ -16,11 +16,26 @@ namespace MapFarce.DataModel
         public abstract void PopulateFromXml(XmlNode node);
     }
 
+    public interface IProjectControl
+    {
+        void SetName(string name);
+    }
+
     public abstract class ProjectElement<T, U> : Savable
         where T : ProjectElement<T, U>
-        where U : UserControl
+        where U : UserControl, IProjectControl
     {
-        public abstract string Name { get; }
+        private string name;
+        public string Name
+        {
+            get { return name; }
+            set
+            {
+                name = value;
+                if (ProjectControl != null)
+                    ProjectControl.SetName(value);
+            }
+        }
         public bool HasChanges { get; set; }
 
         public U ProjectControl { get; set; }
