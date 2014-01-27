@@ -19,11 +19,16 @@ namespace MapFarce.DataModel
             popup.Populate(this);
             return popup.ShowDialog() == DialogResult.OK;
         }
-
+        
+        const string mappingNodeName = "Mapping", inputsNodeName = "Inputs", outputsNodeName = "Outputs", connectionNodeName = "Connection", linkNodeName = "Link", sourceAttrName = "source", typeAttrName = "type", nameAttrName = "name";
         public override XmlNode CreateXmlNode(XmlNode parent)
         {
-            var node = parent.OwnerDocument.CreateElement("Mapping");
+            var node = parent.OwnerDocument.CreateElement(mappingNodeName);
             parent.AppendChild(node);
+
+            var attr = parent.OwnerDocument.CreateAttribute(nameAttrName);
+            node.Attributes.Append(attr);
+            attr.Value = Name;
 
             SaveBounds(node);
 
@@ -33,8 +38,8 @@ namespace MapFarce.DataModel
 
         protected override void SaveToXml(XmlNode node)
         {
-            SaveConnections(node, "Inputs", Inputs);
-            SaveConnections(node, "Outputs", Outputs);
+            SaveConnections(node, inputsNodeName, Inputs);
+            SaveConnections(node, outputsNodeName, Outputs);
 
             // also save the contents of this mapping
         }
@@ -46,30 +51,80 @@ namespace MapFarce.DataModel
 
             foreach (var connection in connections)
             {
-                var conNode = node.OwnerDocument.CreateElement("Connection");
+                var conNode = node.OwnerDocument.CreateElement(connectionNodeName);
                 root.AppendChild(conNode);
 
                 foreach (var dt in connection.DataTypes)
                 {
-                    var attrib = node.OwnerDocument.CreateAttribute("source");
-                    attrib.InnerText = dt.SourceBase.Name;
-                    conNode.Attributes.Append(attrib);
+                    var sourceNode = node.OwnerDocument.CreateElement(linkNodeName);
+                    conNode.AppendChild(sourceNode);
 
-                    attrib = node.OwnerDocument.CreateAttribute("type");
+                    var attrib = node.OwnerDocument.CreateAttribute(sourceAttrName);
+                    attrib.InnerText = dt.SourceBase.Name;
+                    sourceNode.Attributes.Append(attrib);
+
+                    attrib = node.OwnerDocument.CreateAttribute(typeAttrName);
                     attrib.InnerText = dt.Name;
-                    conNode.Attributes.Append(attrib);
+                    sourceNode.Attributes.Append(attrib);
                 }
             }
         }
 
         public static Mapping LoadFromXml(XmlNode node)
         {
-            throw new NotImplementedException();
+            Mapping m = new Mapping();
+
+            //m.LoadBounds(node); can't run this now, cos it has no ProjectControl to apply this to
+
+            var attr = node.Attributes[nameAttrName];
+            if (attr == null)
+                throw new FormatException();
+            m.Name = attr.Value;
+
+            m.PopulateFromXml(node);
+            return m;
         }
 
         public override void PopulateFromXml(XmlNode node)
         {
-            throw new NotImplementedException();
+            LoadConnections(node, inputsNodeName, Inputs);
+            LoadConnections(node, outputsNodeName, Outputs);
+        }
+
+        private void LoadConnections(XmlNode node, string name, List<Connection> connections)
+        {
+            var root = node[name];
+            if (root == null)
+                throw new FormatException();
+
+            foreach (XmlNode conNode in root.ChildNodes)
+            {
+                var connection = new Connection();
+                connections.Add(connection);
+
+                foreach (XmlNode sourceNode in conNode.ChildNodes)
+                {
+                    if (sourceNode.Name != linkNodeName)
+                        continue;
+
+                    var sourceAttr = sourceNode.Attributes[sourceAttrName];
+                    var typeAttr = sourceNode.Attributes[typeAttrName];
+
+                    if (sourceAttr == null || typeAttr == null)
+                        throw new FormatException();
+
+                    var source = Project.Instance.Sources.Where(s => s.Name == sourceAttr.Value).FirstOrDefault();
+                    if (source == null)
+                        throw new Exception("Source not found: " + sourceAttr.Value);
+
+                    foreach (var type in source)
+                        if (type.Name == typeAttr.Value)
+                        {
+                            connection.DataTypes.Add(type);
+                            break;
+                        }
+                }
+            }
         }
 
         public class Connection

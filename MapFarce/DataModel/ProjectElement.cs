@@ -42,26 +42,56 @@ namespace MapFarce.DataModel
 
         public abstract bool InitializeNew();
 
+        const string boundsNodeName = "Bounds", xposAttr = "X", yposAttr = "Y", widthAttr = "W", heightAttr = "H";
         protected void SaveBounds(XmlNode node)
         {
-            var pos = node.OwnerDocument.CreateElement("Bounds");
+            var pos = node.OwnerDocument.CreateElement(boundsNodeName);
             node.AppendChild(pos);
 
-            var attrib = node.OwnerDocument.CreateAttribute("X");
+            var attrib = node.OwnerDocument.CreateAttribute(xposAttr);
             attrib.InnerText = ProjectControl.Bounds.X.ToString();
             pos.Attributes.Append(attrib);
 
-            attrib = node.OwnerDocument.CreateAttribute("Y");
+            attrib = node.OwnerDocument.CreateAttribute(yposAttr);
             attrib.InnerText = ProjectControl.Bounds.Y.ToString();
             pos.Attributes.Append(attrib);
 
-            attrib = node.OwnerDocument.CreateAttribute("W");
+            attrib = node.OwnerDocument.CreateAttribute(widthAttr);
             attrib.InnerText = ProjectControl.Bounds.Width.ToString();
             pos.Attributes.Append(attrib);
 
-            attrib = node.OwnerDocument.CreateAttribute("H");
+            attrib = node.OwnerDocument.CreateAttribute(heightAttr);
             attrib.InnerText = ProjectControl.Bounds.Height.ToString();
             pos.Attributes.Append(attrib);
+        }
+
+        protected internal void LoadBounds(XmlNode node)
+        {
+            var pos = node.FirstChild;
+            if (pos == null || pos.Name != boundsNodeName)
+                throw new FormatException();
+
+            var attrib = pos.Attributes[xposAttr];
+            if ( attrib == null )
+                throw new FormatException();
+            int x = int.Parse(attrib.Value);
+
+            attrib = pos.Attributes[yposAttr];
+            if (attrib == null)
+                throw new FormatException();
+            int y = int.Parse(attrib.Value);
+
+            attrib = pos.Attributes[widthAttr];
+            if (attrib == null)
+                throw new FormatException();
+            int w = int.Parse(attrib.Value);
+
+            attrib = pos.Attributes[heightAttr];
+            if (attrib == null)
+                throw new FormatException();
+            int h = int.Parse(attrib.Value);
+
+            ProjectControl.Bounds = new Rectangle(x, y, w, h);
         }
     }
 }

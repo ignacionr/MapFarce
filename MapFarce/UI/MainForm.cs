@@ -45,11 +45,8 @@ namespace MapFarce.UI
             if (!CheckCloseExisting())
                 return;
 
-            if (Project.Open())
-            {
-                projectPanel.Reset();
+            if (Project.Open(projectPanel))
                 projectPanel.Show();
-            }
         }
 
         private bool CheckCloseExisting()

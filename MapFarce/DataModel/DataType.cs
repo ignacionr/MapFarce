@@ -55,11 +55,13 @@ namespace MapFarce.DataModel
 
         public override void PopulateFromXml(XmlNode node)
         {
-            throw new NotImplementedException();
+            foreach (XmlNode child in node.ChildNodes)
+                if (child.Name == DataField.fieldNodeName)
+                    AddField(DataField.LoadFromXml(child));
         }
 
         public abstract DataSource SourceBase { get; }
-        public abstract string Name { get; }
+        public abstract string Name { get; set; }
 
         public bool IsEnabled { get; set; }
 
@@ -115,22 +117,16 @@ namespace MapFarce.DataModel
         }
     }
 
-    public abstract class DataType<SourceType, Data, Field> : DataType
-        where SourceType : DataSource<SourceType, Data, Field>
-        where Data : DataType<SourceType, Data, Field>
-        where Field : DataField
+    public abstract class DataType<SourceType, Data> : DataType
+        where SourceType : DataSource<SourceType, Data>
+        where Data : DataType<SourceType, Data>, new()
     {
-        protected DataType(SourceType source)
-        {
-            Source = source;
-        }
-
         public override DataSource SourceBase { get { return Source; } }
-        public SourceType Source { get; protected set; }
+        public SourceType Source { get; set; }
 
-        protected abstract List<Field> RetrieveFields();
-        private List<Field> Fields;
-        public IList<Field> GetFields()
+        protected abstract List<DataField> RetrieveFields();
+        private List<DataField> Fields;
+        public IList<DataField> GetFields()
         {
             if (Fields == null)
             {
@@ -151,13 +147,15 @@ namespace MapFarce.DataModel
 
         public override void AddField(DataField field)
         {
-            Fields.Add(field as Field);
+            if (Fields == null)
+                Fields = new List<DataField>();
+            Fields.Add(field as DataField);
             field.FieldNumber = Fields.Count;
         }
 
         public override void RemoveField(DataField field)
         {
-            Fields.Remove(field as Field);
+            Fields.Remove(field as DataField);
 
             foreach (var other in Fields)
                 if (other.FieldNumber > field.FieldNumber)

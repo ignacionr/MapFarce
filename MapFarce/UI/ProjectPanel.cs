@@ -98,22 +98,24 @@ namespace MapFarce.UI
             AddControlFor(mapping);
         }
 
-        public void AddControlFor(DataSource source)
+        public DataSourceControl AddControlFor(DataSource source)
         {
             var sourceControl = new DataSourceControl();
             sourceControl.Location = PlaceNewControl(sourceControl.Size);
             sourceControl.Tag = source;
             Controls.Add(sourceControl);
             sourceControl.Populate(source);
+            return sourceControl;
         }
 
-        public void AddControlFor(Mapping mapping)
+        public MappingControl AddControlFor(Mapping mapping)
         {
             MappingControl mappingControl = new MappingControl();
             mappingControl.Location = PlaceNewControl(mappingControl.Size);
             mappingControl.Tag = mapping;
             Controls.Add(mappingControl);
             mappingControl.Populate(mapping);
+            return mappingControl;
         }
 
         private Point PlaceNewControl(Size size)

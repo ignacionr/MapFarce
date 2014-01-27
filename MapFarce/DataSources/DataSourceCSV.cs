@@ -18,7 +18,7 @@ using System.Xml;
 namespace MapFarce.DataSources
 {
     [DataSourceDescriptor("CSV")]
-    public class DataSourceCSV : DataSource<DataSourceCSV, DataSourceCSV.DataTypeCSV, DataSourceCSV.DataFieldCSV>
+    public class DataSourceCSV : DataSource<DataSourceCSV, DataSourceCSV.DataTypeCSV>
     {
         public DataSourceCSV()
         {
@@ -55,7 +55,7 @@ namespace MapFarce.DataSources
 
         protected override IList<DataTypeCSV> RetrieveDataTypes()
         {
-            return new DataTypeCSV[] { new DataTypeCSV(this) };
+            return new DataTypeCSV[] { new DataTypeCSV() { Source = this } };
         }
 
         [UIEditablePropertyAttribute(null, "The file to read from", "File")]
@@ -65,7 +65,7 @@ namespace MapFarce.DataSources
             set
             {
                 file = value;
-                Name = file.Name;
+                Name = file == null ? "CSV source" : file.Name;
             }
         }
         private FileInfo file;
@@ -88,14 +88,10 @@ namespace MapFarce.DataSources
         [UIEditablePropertyAttribute("Trim spaces", "Whether or not spaces at the start & End of each field should be trimmed", "Format")]
         public bool TrimSpaces { get; set; }
 
-        public class DataTypeCSV : DataType<DataSourceCSV, DataTypeCSV, DataFieldCSV>
+        public class DataTypeCSV : DataType<DataSourceCSV, DataTypeCSV>
         {
-            public override string Name { get { return "Rows"; } }
-
-            public DataTypeCSV(DataSourceCSV source)
-                : base(source)
-            {
-            }
+            private string name = "Rows";
+            public override string Name { get { return name; } set { name = value; } }
 
             private CsvReader CreateReader()
             {
@@ -112,24 +108,24 @@ namespace MapFarce.DataSources
                 return reader;
             }
 
-            protected override List<DataFieldCSV> RetrieveFields()
+            protected override List<DataField> RetrieveFields()
             {
                 if ( Source.DataMode == Mode.Output )
-                    return new List<DataFieldCSV>();
+                    return new List<DataField>();
 
                 var reader = CreateReader();
-                var fields = new List<DataFieldCSV>();
+                var fields = new List<DataField>();
 
                 if (Source.HasHeaders)
                 {
                     string[] headers = reader.GetFieldHeaders();
                     for (int i = 0; i < headers.Length; i++)
-                        fields.Add(new DataFieldCSV(headers[i]));
+                        fields.Add(new DataField(headers[i], FieldType.String));
                 }
                 else
                 {
                     for (int i = 0; i < reader.FieldCount; i++)
-                        fields.Add(new DataFieldCSV("Col " + i));
+                        fields.Add(new DataField("Col " + i, FieldType.String));
                 }
 
                 reader.Dispose();
@@ -138,7 +134,7 @@ namespace MapFarce.DataSources
 
             public override DataField CreateField()
             {
-                return new DataFieldCSV(string.Empty);
+                return new DataField(string.Empty, FieldType.String);
             }
 
             CsvReader reader;
@@ -170,14 +166,6 @@ namespace MapFarce.DataSources
             public override bool HasMoreData()
             {
                 return reader != null && !reader.EndOfStream;
-            }
-        }
-
-        public class DataFieldCSV : DataField
-        {
-            public DataFieldCSV(string name)
-                : base(name, FieldType.String)
-            {
             }
         }
 

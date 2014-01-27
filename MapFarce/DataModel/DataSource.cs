@@ -106,7 +106,12 @@ namespace MapFarce.DataModel
             else if (attrib.Value == Mode.Output.ToString())
                 source.DataMode = Mode.Output;
 
+            //source.LoadBounds(node); can't run this now, cos it has no ProjectControl to apply this to
+
             source.PopulateFromXml(node);
+
+            source.LoadTypesFromXml(node);
+
             return source;
         }
 
@@ -121,6 +126,8 @@ namespace MapFarce.DataModel
                 prop.SetValueFromString(this, child.InnerText);
             }
         }
+
+        protected abstract void LoadTypesFromXml(XmlNode node);
 
         public abstract IEnumerator<DataType> GetEnumerator();
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() { return GetEnumerator(); }
@@ -168,10 +175,9 @@ namespace MapFarce.DataModel
         public static DataSource Active { get; set; }
     }
 
-    public abstract class DataSource<Source, Data, Field> : DataSource
-        where Source : DataSource<Source, Data, Field>
-        where Data : DataType<Source, Data, Field>
-        where Field : DataField
+    public abstract class DataSource<Source, Data> : DataSource
+        where Source : DataSource<Source, Data>
+        where Data : DataType<Source, Data>, new()
     {
         private void EnsureDataTypes()
         {
@@ -189,6 +195,20 @@ namespace MapFarce.DataModel
                 EnsureDataTypes();
                 return DataTypes.Count;
             }
+        }
+
+        protected override void LoadTypesFromXml(XmlNode node)
+        {
+            DataTypes = new List<Data>();
+
+            var typesRoot = node["DataTypes"];
+            if (typesRoot != null)
+                foreach (XmlNode typeNode in typesRoot.ChildNodes)
+                {
+                    var dt = (Data)DataType.LoadFromXml(typeNode, this);
+                    dt.Source = (Source)this;
+                    DataTypes.Add(dt);
+                }
         }
 
         public override Type GetDataTypeType() { return typeof(Data); }

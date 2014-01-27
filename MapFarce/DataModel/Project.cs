@@ -148,46 +148,54 @@ namespace MapFarce.DataModel
 
         public static Project LoadFrom(FileInfo fi)
         {
-            Project p = new Project();
+            Project p = Instance = new Project();
             p.filename = fi;
 
-            XmlDocument doc = new XmlDocument();
-            doc.Load(fi.FullName);
-
-            if (doc.DocumentElement.Name != projectNodeName || doc.DocumentElement.ChildNodes.Count < 2)
-                return null;
-
-            var sourceRoot = doc.DocumentElement.ChildNodes[0];
-            var mappingsRoot = doc.DocumentElement.ChildNodes[1];
-
-            if (sourceRoot.Name != sourcesNodeName || mappingsRoot.Name != mappingsNodeName)
-                return null;
-
-            foreach (XmlNode node in sourceRoot.ChildNodes)
+            try
             {
-                DataSource source = DataSource.LoadFromXml(node);
-                p.sources.Add(source);
-                Panel.AddControlFor(source); // ought to load dimensions and whatnot from the xml
 
-                var typesRoot = node["DataTypes"];
-                if (typesRoot != null)
-                    foreach (XmlNode typeNode in typesRoot.ChildNodes)
-                    {
-                        DataType dt = DataType.LoadFromXml(typeNode, source);
-                    }
+                XmlDocument doc = new XmlDocument();
+                doc.Load(fi.FullName);
+
+                if (doc.DocumentElement.Name != projectNodeName || doc.DocumentElement.ChildNodes.Count < 2)
+                    return null;
+
+                var sourceRoot = doc.DocumentElement.ChildNodes[0];
+                var mappingsRoot = doc.DocumentElement.ChildNodes[1];
+
+                if (sourceRoot.Name != sourcesNodeName || mappingsRoot.Name != mappingsNodeName)
+                    return null;
+
+                foreach (XmlNode node in sourceRoot.ChildNodes)
+                {
+                    DataSource source = DataSource.LoadFromXml(node);
+                    p.sources.Add(source);
+
+                    Panel.AddControlFor(source);
+                    source.LoadBounds(node);
+                }
+
+                foreach (XmlNode node in mappingsRoot.ChildNodes)
+                {
+                    Mapping mapping = Mapping.LoadFromXml(node);
+                    p.mappings.Add(mapping);
+                    Panel.AddControlFor(mapping);
+                    mapping.LoadBounds(node);
+                }
             }
-
-            foreach (XmlNode node in mappingsRoot.ChildNodes)
+            catch (FormatException ex)
             {
-                Mapping mapping = Mapping.LoadFromXml(node);
-                p.mappings.Add(mapping);
-                Panel.AddControlFor(mapping); // ought to load dimensions and whatnot from the xml
+                return null;
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return null;
             }
 
             return p;
         }
 
-        public static bool Open()
+        public static bool Open(ProjectPanel panel)
         {
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = "All Files (*.*)|*.*";
@@ -195,13 +203,16 @@ namespace MapFarce.DataModel
             if (ofd.ShowDialog() != System.Windows.Forms.DialogResult.OK)
                 return false;
 
+            panel.Reset();
+
             var p = Project.LoadFrom(new FileInfo(ofd.FileName));
-            if (p != null)
+            if (p == null)
             {
-                Instance = p;
-                return true;
+                Instance = null;
+                return false;
             }
-            return false;
+
+            return true;
         }
     }
 }
