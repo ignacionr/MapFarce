@@ -99,7 +99,7 @@ namespace MapFarce.DataModel
 
             foreach (XmlNode conNode in root.ChildNodes)
             {
-                var connection = new Connection();
+                var connection = new Connection(this);
                 connections.Add(connection);
 
                 foreach (XmlNode sourceNode in conNode.ChildNodes)
@@ -120,16 +120,57 @@ namespace MapFarce.DataModel
                     foreach (var type in source)
                         if (type.Name == typeAttr.Value)
                         {
-                            connection.DataTypes.Add(type);
+                            connection.LinkTo(type);
                             break;
                         }
                 }
             }
         }
 
+        public void Perform(Connection input, Connection output)
+        {
+            List<DataSource> sources = new List<DataSource>();
+
+            foreach ( var dt in input.DataTypes )
+            {
+                if (!sources.Contains(dt.SourceBase))
+                {
+                    dt.SourceBase.BeginRead();
+                    sources.Add(dt.SourceBase);
+                }
+
+                dt.BeginRead();
+            }
+
+
+            throw new NotImplementedException();
+
+
+            foreach (var dt in input.DataTypes)
+                dt.FinishRead();
+
+            foreach (var source in sources)
+                source.FinishRead();
+        }
+
         public class Connection
         {
-            public List<DataType> DataTypes = new List<DataType>();
+            public Mapping Mapping { get; private set; }
+            public Connection(Mapping m) { Mapping = m; }
+            private List<DataType> dataTypes = new List<DataType>();
+            public IList<DataType> DataTypes { get { return dataTypes.AsReadOnly(); } }
+
+            public void LinkTo(DataType type)
+            {
+                dataTypes.Add(type);
+                type.Connections.Add(this);
+            }
+
+            public void Unlink(DataType type)
+            {
+                dataTypes.Remove(type);
+                type.Connections.Remove(this);
+            }
         }
     }
 }

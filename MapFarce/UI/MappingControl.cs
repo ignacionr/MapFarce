@@ -58,7 +58,7 @@ namespace MapFarce.UI
         {
             var popup = new MappingConnectionPopup();
 
-            var connection = new Mapping.Connection();
+            var connection = new Mapping.Connection(Element);
             popup.Populate(Element, connection, DataSource.Mode.Input);
 
             if (popup.ShowDialog() != DialogResult.OK)
@@ -74,7 +74,7 @@ namespace MapFarce.UI
         {
             var popup = new MappingConnectionPopup();
 
-            var connection = new Mapping.Connection();
+            var connection = new Mapping.Connection(Element);
             popup.Populate(Element, connection, DataSource.Mode.Output);
 
             if (popup.ShowDialog() != DialogResult.OK)

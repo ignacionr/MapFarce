@@ -123,26 +123,6 @@ namespace MapFarce.UI
             return new Point(40, 40);
         }
 
-        public void TestRead()
-        {
-            DataSource source = null;
-            foreach ( Control c in Controls )
-                if (c is DataSourceControl)
-                {
-                    source = (c as DataSourceControl).Element;
-                    break;
-                }
-
-            if (source == null)
-                return;
-
-            DataSet ds = source.ReadDataSet();
-            DataGridView grid = new DataGridView();
-            grid.DataSource = ds.Tables[0];
-            grid.Location = new Point(16, 48);
-            Controls.Add(grid);
-        }
-
         public ContextMenu inputDataTypeRightClick, outputDataTypeRightClick;
 
         protected override void OnPaint(PaintEventArgs e)

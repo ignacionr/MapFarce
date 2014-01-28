@@ -65,6 +65,8 @@ namespace MapFarce.DataModel
 
         public bool IsEnabled { get; set; }
 
+        public List<Mapping.Connection> Connections = new List<Mapping.Connection>();
+
         public override string ToString() { return string.Format("{0} - {1}", SourceBase.Name, Name); }
 
         public abstract void SourceChanged();

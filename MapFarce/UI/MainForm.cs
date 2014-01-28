@@ -87,9 +87,11 @@ namespace MapFarce.UI
             projectPanel.AddMapping();
         }
 
-        private void btnTestRead_Click(object sender, EventArgs e)
+        private void btnRunMappings_Click(object sender, EventArgs e)
         {
-            projectPanel.TestRead();
+            projectPanel.Enabled = false;
+            Project.Instance.RunMappings();
+            projectPanel.Enabled = true;
         }
     }
 }

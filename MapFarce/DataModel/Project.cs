@@ -214,5 +214,31 @@ namespace MapFarce.DataModel
 
             return true;
         }
+
+        public void RunMappings()
+        {
+            foreach ( var source in sources )
+                if (source.DataMode == DataSource.Mode.Output)
+                {
+                    source.BeginWrite();
+
+                    foreach (var type in source)
+                    {
+                        type.BeginWrite();
+
+                        foreach (var connection in type.Connections)
+                        {
+                            Mapping m = connection.Mapping;
+
+                            foreach (var input in m.Inputs)
+                                m.Perform(input, connection);
+                        }
+
+                        type.FinishWrite();
+                    }
+
+                    source.FinishWrite();
+                }
+        }
     }
 }

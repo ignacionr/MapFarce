@@ -39,7 +39,7 @@
             this.btnAddInput = new System.Windows.Forms.ToolStripDropDownButton();
             this.btnAddOutput = new System.Windows.Forms.ToolStripDropDownButton();
             this.btnAddMapping = new System.Windows.Forms.ToolStripButton();
-            this.btnTestRead = new System.Windows.Forms.ToolStripButton();
+            this.btnRunMappings = new System.Windows.Forms.ToolStripButton();
             this.projectPanel = new MapFarce.UI.ProjectPanel();
             this.menuStrip1.SuspendLayout();
             this.projectToolStrip.SuspendLayout();
@@ -105,7 +105,7 @@
             this.btnAddInput,
             this.btnAddOutput,
             this.btnAddMapping,
-            this.btnTestRead});
+            this.btnRunMappings});
             this.projectToolStrip.Location = new System.Drawing.Point(0, 24);
             this.projectToolStrip.Name = "projectToolStrip";
             this.projectToolStrip.Size = new System.Drawing.Size(670, 25);
@@ -138,15 +138,15 @@
             this.btnAddMapping.Text = "Add &mapping";
             this.btnAddMapping.Click += new System.EventHandler(this.btnAddMapping_Click);
             // 
-            // btnTestRead
+            // btnRunMappings
             // 
-            this.btnTestRead.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.btnTestRead.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnTestRead.Margin = new System.Windows.Forms.Padding(20, 1, 0, 2);
-            this.btnTestRead.Name = "btnTestRead";
-            this.btnTestRead.Size = new System.Drawing.Size(59, 22);
-            this.btnTestRead.Text = "Test read";
-            this.btnTestRead.Click += new System.EventHandler(this.btnTestRead_Click);
+            this.btnRunMappings.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.btnRunMappings.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnRunMappings.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnRunMappings.Name = "btnRunMappings";
+            this.btnRunMappings.Size = new System.Drawing.Size(96, 22);
+            this.btnRunMappings.Text = "&Run mapping(s)";
+            this.btnRunMappings.Click += new System.EventHandler(this.btnRunMappings_Click);
             // 
             // projectPanel
             // 
@@ -189,9 +189,9 @@
         private System.Windows.Forms.ToolStrip projectToolStrip;
         private System.Windows.Forms.ToolStripDropDownButton btnAddInput;
         private System.Windows.Forms.ToolStripDropDownButton btnAddOutput;
-        private System.Windows.Forms.ToolStripButton btnTestRead;
         private System.Windows.Forms.ToolStripMenuItem saveProjectasToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton btnAddMapping;
+        private System.Windows.Forms.ToolStripButton btnRunMappings;
     }
 }
 

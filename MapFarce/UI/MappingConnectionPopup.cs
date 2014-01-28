@@ -38,7 +38,7 @@ namespace MapFarce.UI
         private void btnOK_Click(object sender, EventArgs e)
         {
             foreach (DataType type in chkListDataTypes.CheckedItems)
-                connection.DataTypes.Add(type);
+                connection.LinkTo(type);
 
             this.DialogResult = DialogResult.OK;
             Close();

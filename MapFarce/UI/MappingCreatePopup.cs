@@ -34,15 +34,15 @@ namespace MapFarce.UI
 
         private void btnOK_Click(object sender, EventArgs e)
         {
-            Mapping.Connection connection = new Mapping.Connection();
+            Mapping.Connection connection = new Mapping.Connection(mapping);
             foreach ( DataType type in chkListInput.CheckedItems )
-                connection.DataTypes.Add(type);
+                connection.LinkTo(type);
 
             mapping.Inputs.Add(connection);
 
-            connection = new Mapping.Connection();
+            connection = new Mapping.Connection(mapping);
             foreach (DataType type in chkListOutput.CheckedItems)
-                connection.DataTypes.Add(type);
+                connection.LinkTo(type);
 
             mapping.Outputs.Add(connection);
 
