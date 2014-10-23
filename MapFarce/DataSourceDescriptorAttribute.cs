@@ -15,7 +15,7 @@ namespace MapFarce
             Name = name;
         }
 
-        private static SortedList<Type, string> namesByType = new SortedList<Type, string>();
+        private static Dictionary<Type, string> namesByType = new Dictionary<Type, string>();
         public static string GetName(Type type)
         {
             string name;
