@@ -53,6 +53,12 @@
     <Compile Include="DataModel\Mapping.cs" />
     <Compile Include="DataModel\Project.cs" />
     <Compile Include="DataModel\ProjectElement.cs" />
+    <Compile Include="EditProperties\CharEditorControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="EditProperties\CharEditorControl.Designer.cs">
+      <DependentUpon>CharEditorControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\DataSourceControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -125,6 +131,9 @@
       <DependentUpon>ProjectPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="EditProperties\CharEditorControl.resx">
+      <DependentUpon>CharEditorControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\DataSourceControl.resx">
       <DependentUpon>DataSourceControl.cs</DependentUpon>
     </EmbeddedResource>

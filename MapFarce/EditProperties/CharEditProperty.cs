@@ -8,32 +8,31 @@ namespace MapFarce.EditProperties
 {
     class CharEditProperty : EditPropertyBase
     {
+        private CharEditorControl ce;
+        
         public CharEditProperty(string name)
             : base(name)
         {
-            tb = new TextBox();
-            tb.Width = 20;
-            tb.MaxLength = 1;
-            Controls.Add(tb);
-            tb.TextAlign = HorizontalAlignment.Center;
+            this.ce = new CharEditorControl();
+            //tb.Width = 20;
+            //tb.MaxLength = 1;
+            Controls.Add(this.ce);
         }
-
-        TextBox tb;
 
         public override void SetToolTip(ToolTip tip, string text)
         {
             base.SetToolTip(tip, text);
-            tip.SetToolTip(tb, text);
+            tip.SetToolTip(this.ce, text);
         }
 
         public override void SetValue(object val)
         {
-            tb.Text = val.ToString();
+            this.ce.Value = (char)val;
         }
 
         public override object GetValue()
         {
-            return tb.Text.Length > 0 ? tb.Text[0] : 'X';
+            return this.ce.Value;
         }
     }
 }
